@@ -39,10 +39,10 @@ class mainWindow:
 
         # Expenses Frame's Elements
         self.expensesLabel1 = Label(self.expensesframe, text = 'EXPENSES RECORD', height=2, bg=default_color)
-        self.addButtonE = Button(self.expensesframe, text='ADD RECORD', height = 2, width=15, border=1, bg=default_color)
-        self.editButtonE = Button(self.expensesframe, text='EDIT RECORD', height = 2, width=15, border=1, bg=default_color)
-        self.deleteButtonE = Button(self.expensesframe, text='DELETE RECORD', height = 2, width=15, border=1, bg=default_color)
-        self.viewButtonE = Button(self.expensesframe, text='VIEW RECORD', height = 2, width=15, border=1, bg=default_color)
+        self.addButtonE = Button(self.expensesframe, text='ADD RECORD', height = 2, width=15, border=1, bg=default_color, command = lambda: self.subFunctions('Add', milk=False))
+        self.editButtonE = Button(self.expensesframe, text='EDIT RECORD', height = 2, width=15, border=1, bg=default_color, command = lambda: self.subFunctions('Edit', milk=False))
+        self.deleteButtonE = Button(self.expensesframe, text='DELETE RECORD', height = 2, width=15, border=1, bg=default_color, command = lambda: self.subFunctions('Delete', milk=False))
+        self.viewButtonE = Button(self.expensesframe, text='VIEW RECORD', height = 2, width=15, border=1, bg=default_color, command = lambda: self.subFunctions('View', milk=False))
         
         self.netIncomeButton = Button(self.leftFrame, text = 'SHOW NET INCOME', width=20, height=4, bg=default_color)        
 
@@ -56,14 +56,14 @@ class mainWindow:
         self.milkGraphTitle = Label(self.rightFrame, text='MILK STATUS', bg=default_color)
         
         # Expenses Graph Section ......................................
-        self.milkGraphTitle = Label(self.rightFrame, text='EXPENSES STATUS', bg=default_color)
+        self.expensesGraphTitle = Label(self.rightFrame, text='EXPENSES STATUS', bg=default_color)
 
         self.exitButton = Button(
             self.root, text='Exit', height = 2, width=20, command= self.root.quit, bg=default_color
             )
         
     def placeGuiMain(self):
-        self.globalTitle.grid(row=0, column=0, columnspan=100, padx=10)
+        self.globalTitle.grid(row=0, columnspan=50, padx=10)
 
         self.milkLabel1.grid(row=1, column=1, columnspan=2)
 
@@ -97,17 +97,17 @@ class mainWindow:
 
         self.milkGraphTitle.grid(row=2, column=1, pady=5)
 
-        Label(self.rightFrame, text='GRAPH AREA', width=100, bg=default_color).grid(row=3, column=1, pady=5)
+        Label(self.rightFrame, text='GRAPH AREA1', width=100, bg=default_color).grid(row=3, column=1, pady=5)
                 
-        self.milkGraphTitle.grid(row=4, column=1, pady=5)
+        self.expensesGraphTitle.grid(row=4, column=1, pady=5)
 
-        Label(self.rightFrame, text='GRAPH AREA', width=100, bg=default_color).grid(row=5, column=1, pady=5)
+        Label(self.rightFrame, text='GRAPH AREA2', width=100, bg=default_color).grid(row=5, column=1, pady=5)
                 
         self.rightFrame.grid(row=1, column=2, padx=10, pady=10)
                 
         self.mainframe.grid(pady=10, padx=10)
 
-        self.exitButton.grid(row=3, column=3, padx=10, sticky='e')
+        self.exitButton.grid(row=3, column=1, padx=10)
 
     def subFunctions(self, title, milk=True):
 
@@ -120,7 +120,7 @@ class mainWindow:
             self.milk = milkRecord(title, self.root, mainframeTest).placeGuiMilk()
         elif title == 'View' and milk:
             self.milk = viewMilkRecord(title, self.root, mainframeTest)
-        elif title == 'Add' and not milk:
+        elif not milk:
             self.expense = expenseRecord(title, self.root, mainframeTest)
 
     def back(self, mainframeTest):

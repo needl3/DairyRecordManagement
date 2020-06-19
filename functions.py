@@ -1,7 +1,8 @@
-import tkinter as tkk, tkcalendar as tc, tkinter.messagebox, os
-import datetime
+import tkinter as tkk, tkcalendar as tc, tkinter.messagebox, os, datetime
 
+# Global variables
 default_color = '#d1fcf1'
+dairy_pricing_coefecient = (57.11/(4*8))
 
 # Get todays date in list format Y/M/D
 date = datetime.date.today().strftime('%Y/%m/%d').split('/')
@@ -122,26 +123,26 @@ class milkRecord:
 
 			else:
 				# First Add record at last position
-				self.writeDataChronologically(given_data=entry)
+				self.writeDataChronologically(given_data=entry, file_given='data.txt', title = title)
 				
 				# Then sort the whole document(I will update the algorithm later, it's a bit resource using)
-				self.writeDataChronologically()
+				self.writeDataChronologically(file_given='data.txt', title = title)
 
 		elif title=='Edit':
-			self.writeDataChronologically(given_data=entry+'\n')
+			self.writeDataChronologically(given_data=entry+'\n', file_given='data.txt', title = title)
 		else:
 			# Passing date means deleting the record of that date
-			self.writeDataChronologically(date=self.selected_date)
+			self.writeDataChronologically(date=self.selected_date, file_given='data.txt', title = title)
 
-		self.showConfirmation(success=True)
+		self.showConfirmation(selected_date = '/'.join(date), title = title, success=True)
 
 	# To delete, call it with date parmenter.
 	# To edit, pass the editing line as given_data=editing_line .
-	def writeDataChronologically(self,given_data = None, date=None):
+	def writeDataChronologically(self, given_data = None, date=None, file_given=None, title = None):
 		if given_data == None and date == None:	#Sort all data from scratch
 			date_list = []
 			sorted_data = []
-			with open('data.txt', 'r') as file:
+			with open(file_given, 'r') as file:
 				data = file.read().split('\n')
 			i=0
 			for datum in data:
@@ -168,14 +169,14 @@ class milkRecord:
 				for i in sorted_data:
 					file.write(i+'\n')
 
-			os.remove('data.txt')
-			os.rename('temp_data.txt','data.txt')
+			os.remove(file_given)
+			os.rename('temp_data.txt',file_given)
 
 		elif given_data == None and date != None:	#Delete specific data for given date
 			index = None
 
 			# Read file
-			with open('data.txt', 'r') as file:
+			with open(file_given, 'r') as file:
 				data = file.readlines()
 
 			# Find index of the specific date if exists
@@ -186,13 +187,13 @@ class milkRecord:
 			# If data exists
 			if index != None:
 				del data[index]
-				with open('data.txt', 'w') as file:
+				with open(file_given, 'w') as file:
 					for i in data:
 						print(i)
 						file.write(i)
 
 		else:		#Add the given data in the line
-			with open('data.txt', 'r') as file:
+			with open(file_given, 'r') as file:
 				data = file.readlines()
 
 			# Now find the date's index position
@@ -212,13 +213,13 @@ class milkRecord:
 			
 			print(data)
 			
-			with open('data.txt', 'w') as file:
+			with open(file_given, 'w') as file:
 				for datum in data:
 					file.write(datum)
 	
 	# To show data store success, pass success=True
 	# To show no data, pass nothing
-	def showConfirmation(self, success=False):
+	def showConfirmation(self, selected_date=None, title=None, success=False):
 		if self.title == 'Delete':
 			self.changeEntryState('normal')
 			# Morning data
@@ -243,15 +244,15 @@ class milkRecord:
 			self.fatEntryE.delete(0, tkk.END)
 			self.snfEntryE.delete(0, tkk.END)
 			tkinter.messagebox.showinfo(
-					'No Data', 'No previous data found to '+self.title+'.\nFirst Add data for '+
-					 self.selected_date)
+					'No Data', 'No previous data found to '+title+'.\nFirst Add data for '+
+					 selected_date)
 
 			self.fetchDataButton.configure(text='Check Data')
 
 		else:
-			tkinter.messagebox.showinfo("Record Update","Record {}ed Successfully for: {}".format(
-				self.title,
-				self.selected_date
+			tkinter.messagebox.showinfo("Record Update","Record {}d Successfully for: {}".format(
+				title,
+				selected_date
 				)
 			)
 	def fetchDataMilk(self):
@@ -293,11 +294,11 @@ class milkRecord:
 						break
 
 			if not flag:
-				self.showConfirmation(False)
+				self.showConfirmation(selected_date = self.selected_date, title=self.title)
 				return
 				
 		except FileNotFoundError:
-			self.showConfirmation(False)
+			self.showConfirmation(selected_date = self.selected_date, title = self.title)
 			return
 class viewMilkRecord:
 	def __init__(self, title, root, mainframe2):
@@ -343,13 +344,14 @@ class viewMilkRecord:
 			)
 		setButton.grid(row=4, columnspan=3)
 
+
 	def placeData(self, mainframe2, ranged_date=[]):
 		# For Scrollbar
-		myframe=tkk.LabelFrame(mainframe2,width=50,height=100,bd=1)
+		myframe=tkk.LabelFrame(mainframe2,width=50,height=130,bd=1, bg=default_color)
 		myframe.grid(row=2, column=1)
 
 		def scrollfunction(event):
-		    canvas.configure(scrollregion=canvas.bbox("all"),width=650,height=400)
+		    canvas.configure(scrollregion=canvas.bbox("all"),width=670,height=400)
 
 		canvas=tkk.Canvas(myframe, bg=default_color)
 		sectionTitles=tkk.Frame(canvas, bg=default_color)
@@ -367,6 +369,7 @@ class viewMilkRecord:
 
 		
 		# Date
+		tkk.Label(sectionTitles, text='S.N', borderwidth =2, relief='ridge', font=('30'), bg='cyan').grid(row=2, column=0, rowspan=2, padx=20)
 		tkk.Label(sectionTitles, text='Date', borderwidth=2, relief='ridge', font=('30'), bg='cyan').grid(row=2, column=1, rowspan=2, padx=40)
 
 		# Morning section
@@ -406,6 +409,10 @@ class viewMilkRecord:
 			# of dates between max and min dates
 
 		ro = 4
+		fatCount=0
+		totalMilk = 0
+		averageFat = 0
+		averageSnf = 0
 		for lines in content:
 			lines = lines.split('-')
 
@@ -414,6 +421,10 @@ class viewMilkRecord:
 			morningMilk = lines[1].split(',')
 			eveningMilk = lines[2].split(',')
 
+			# Displays Number
+			tkk.Label(sectionTitles, text=str(ro-3), font=('20'), bg=default_color).grid(row=ro, column=0, pady=10)
+
+			# Displays date
 			tkk.Label(sectionTitles, text=date_to_be_displayed, font=('20'), bg=default_color).grid(row = ro, column = 1, pady=10)
 			
 			# Morning Data
@@ -426,20 +437,206 @@ class viewMilkRecord:
 			tkk.Label(sectionTitles, text=eveningMilk[1], font=('20'), bg=default_color).grid(row=ro, column=6, pady=10)
 			tkk.Label(sectionTitles, text=eveningMilk[2], font=('20'), bg=default_color).grid(row=ro, column=7, pady=10)
 			ro += 1
+			if morningMilk[1] != '':
+				fatCount += 1
+			if eveningMilk[1] != '':
+				fatCount += 1
 
+			if morningMilk[0] == '':
+				morningMilk[0] = 0
+			if eveningMilk[0] == '':
+				eveningMilk[0] = 0
+			totalMilk += float(morningMilk[0])+float(eveningMilk[0])
+
+			if morningMilk[1] != '':
+				averageFat += float(morningMilk[1])
+			if eveningMilk[1] != '':
+				averageFat += float(eveningMilk[1])
+
+			if morningMilk[2] != '':
+				averageSnf += float(morningMilk[2])
+			if eveningMilk[2] != '':
+				averageSnf += float(eveningMilk[2])
+
+		averageFat = round(averageFat/fatCount, 3)
+		averageSnf = round(averageSnf/fatCount, 3)
+
+		# Calculate income based on current pricing scheme
+		# of respective dairy companies in this case it's safal dairy
+		# Data is that 
+
+		expectedIncome = round(totalMilk * dairy_pricing_coefecient * averageFat * averageSnf, 3)
+
+		# Frame for displaying total quantities of elements
+		totalFrame = tkk.Frame(mainframe2, bg=default_color)
+		
+		# Title Labels
+		tkk.Label(totalFrame, text='Total Litres', bg=default_color).grid(row = 1, column=1, padx=20)
+		tkk.Label(totalFrame, text='Average Fat', bg=default_color).grid(row = 1, column=2, padx=20)
+		tkk.Label(totalFrame, text='Average SNF', bg=default_color).grid(row = 1, column=3, padx=20)
+		tkk.Label(totalFrame, text='Expected Income', bg=default_color).grid(row = 1, column=4, padx=20)
+
+		# Labels values
+		litreEntry = tkk.Entry(totalFrame, width = 10)
+		fatEntry = tkk.Entry(totalFrame, width = 10)
+		snfEntry = tkk.Entry(totalFrame, width = 10)
+		expectedIncomeEntry = tkk.Entry(totalFrame, width=15)
+
+		litreEntry.insert(0, totalMilk)
+		fatEntry.insert(0, averageFat)
+		snfEntry.insert(0, averageSnf)
+		expectedIncomeEntry.insert(0, expectedIncome)
+
+		litreEntry.configure(state='readonly')
+		fatEntry.configure(state='readonly')
+		snfEntry.configure(state='readonly')
+		expectedIncomeEntry.configure(state='readonly')
+
+		litreEntry.grid(row=2, column=1)
+		fatEntry.grid(row=2, column=2)
+		snfEntry.grid(row=2, column=3)
+		expectedIncomeEntry.grid(row=2, column=4)
+
+		totalFrame.grid(row=3, column=1, pady=20)
+	
 	def setRange(self, mainframe2, date1, date2):
 		intended_dates = [date1+datetime.timedelta(days=i) for i in range((date2-date1).days+1)]
 		self.placeData(mainframe2, intended_dates)
-class expensesRecord:
-	def __init__(self, title, root, mainframe2):
-		pass
+class expenseRecord:
+	def __init__(self, title, root, mainframe):
+		self.title = title
+		mainframe.grid(row=1)
+		root.title(title+' Expenses Record')
+		root.configure(background=default_color)
+		
+		tkk.Label(mainframe, text = title.upper() + ' EXPENSES RECORD', bg=default_color, font=('20')).grid(row=0, columnspan=4, pady=20)
+
+		if title != 'View':
+			self.add(mainframe)
+		else:
+			self.view()
+
+	def add(self, mainframe):
+
+		# Placing left Frame
+		leftFrame = tkk.Frame(mainframe, bg=default_color,)
+		leftFrame.grid(row=1, column=1)
+
+		# Placing right frame
+		rightFrame = tkk.Frame(mainframe, bg=default_color,)
+		rightFrame.grid(row=1, column=2, padx=20)
+
+		tkk.Label(rightFrame, text='Select Date', font=('1'), bg= default_color).grid(row=0, pady=10)
+		cal = tc.Calendar(rightFrame, selectmode='day',
+			year=int(date[0]),
+			day=int(date[2]),
+			month=int(date[1]))
+		cal.grid(row=1)
+
+		if self.title == 'Add' or self.title == 'Edit':
+			# Placing quantities Entries
+			self.chhokarEntry = tkk.Entry(leftFrame, width=12)
+			self.chhokarEntry.grid(row=2, column=1, padx=20)
+
+			self.danaEntry = tkk.Entry(leftFrame, width=12)
+			self.danaEntry.grid(row=2, column=2, padx=20)
+
+			self.aataEntry = tkk.Entry(leftFrame, width=12)
+			self.aataEntry.grid(row=2, column=3, padx=20)
+
+			self.gheeEntry = tkk.Entry(leftFrame, width=12)
+			self.gheeEntry.grid(row=2, column=4, padx=20)
+
+			self.otherEntry = tkk.Entry(leftFrame, width=12)
+			self.otherEntry.grid(row=4, column=2, columnspan=2)
+
+			# Extracted Data
+			ext_data = '{}-{},{},{},{},{}'.format(
+				cal.selection_get().strftime('%m/%d/%Y'),
+				self.chhokarEntry.get(),
+				self.danaEntry.get(),
+				self.aataEntry.get(),
+				self.gheeEntry.get(),
+				self.otherEntry.get()
+				)
+			spec_text1 = 'Select the ones to delete'
+			spec_text2 = 'Other'
+		
+		elif self.title == 'Delete':
+			var_chokkar = tkk.IntVar()
+			var_dana = tkk.IntVar()
+			var_aata = tkk.IntVar()
+			var_ghee = tkk.IntVar()
+			var_others = tkk.IntVar()
+
+			tkk.Checkbutton(leftFrame, variable=var_chokkar, bg=default_color, onvalue=1, offvalue=0).grid(row=2, column=1, padx=20)
+			tkk.Checkbutton(leftFrame, variable=var_dana, bg=default_color, onvalue=1, offvalue=0).grid(row=2, column=2, padx=20)
+			tkk.Checkbutton(leftFrame, variable=var_aata, bg=default_color, onvalue=1, offvalue=0).grid(row=2, column=3, padx=20)
+			tkk.Checkbutton(leftFrame, variable=var_ghee, bg=default_color, onvalue=1, offvalue=0).grid(row=2, column=4, padx=20)
+			tkk.Checkbutton(leftFrame, variable=var_others, bg=default_color, onvalue=1, offvalue=0).grid(row=4, column=2, columnspan=2, padx=20)
+
+			spec_text1 = 'Specify No. of Boras'
+			spec_text2 = 'Other(Specify Amount)'
+
+			ext_data =None
 
 
+		# Placing expenses titles
+		tkk.Label(leftFrame, text=spec_text1, font=('1'), bg=default_color,).grid(row=0, columnspan=5, pady=5)
+		tkk.Label(leftFrame, text='Chhokar', bg=default_color,).grid(row=1, column=1)
+		tkk.Label(leftFrame, text='Dana', bg=default_color,).grid(row=1, column=2)
+		tkk.Label(leftFrame, text='Aata', bg=default_color,).grid(row=1, column=3)
+		tkk.Label(leftFrame, text='Ghee', bg=default_color,).grid(row=1, column=4)
+		tkk.Label(leftFrame, text=spec_text2, font=('1'), bg=default_color,).grid(row=3, columnspan=5, pady=10)
 
+
+		self.fetchDataButton = tkk.Button(rightFrame, text='Fetch Data', command=lambda: self.fetchData(
+			cal.selection_get().strftime('%m/%d/%Y'),
+			file_given = 'data2.txt'), bg=default_color,
+		)
+		self.fetchDataButton.grid(row=2, pady=10)
+
+		addButton = tkk.Button(mainframe, text=self.title + ' Record',
+			font=('1'),
+			command = lambda: milkRecord.writeDataChronologically(self,given_data=ext_data, date=cal.selection_get().strftime('%m/%d/%Y'), file_given='data2.txt'),
+			bg=default_color
+			)
+		addButton.grid(row=2, columnspan=3)
+
+	def fetchData(self, cal_date, file_given = None):
+		try:
+			with open(file_given, 'r') as file:
+				read_data = file.readlines()
+			for i in read_data:
+				if cal_date == i.split('-')[0]:
+					self.fetchDataButton.configure(text='Fetch Data(Data Found)')
+					self.chhokarEntry.delete(0,tkk.END)
+					self.chhokarEntry.insert(0,i.split('-')[1].split(',')[0])
+
+					self.danaEntry.delete(0,tkk.END)
+					self.danaEntry.insert(0,i.split('-')[1].split(',')[1])
+
+					self.aataEntry.delete(0,tkk.END)
+					self.aataEntry.insert(0,i.split('-')[1].split(',')[2])
+
+					self.gheeEntry.delete(0,tkk.END)
+					self.gheeEntry.insert(0,i.split('-')[1].split(',')[3])
+
+					self.otherEntry.delete(0,tkk.END)
+					self.otherEntry.insert(0,i.split('-')[1].split(',')[4])
+				else:
+					tkinter.messagebox.showinfo(
+					'No Data', 'No previous data found to '+self.title+'.\nFirst Add data for '+
+					 cal_date)
+		except FileNotFoundError:
+			tkinter.messagebox.showinfo(
+					'No Data', 'No previous data found to '+self.title+'.\nFirst Add data for '+
+					 cal_date)
+		
 
 if __name__ == '__main__':
 	root = tkk.Tk()
 	mainframe = tkk.LabelFrame(root, border=2)
-	milkRecord('Add', root, mainframe).placeGuiMilk()
+	expenseRecord('Delete', root, mainframe)
 	root.mainloop()
 
