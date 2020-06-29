@@ -573,7 +573,14 @@ class expenseRecord:
 				print('Final data is:  ' + str(data_from_file_refined))
 				
 				# First check for all delete condition
-
+				if var_tkk_all.get() == 1:
+					print('All data')
+					milkRecord.writeDataChronologically(self,
+							date=cal.selection_get().strftime('%m/%d/%Y'),
+							file_given = 'data2.txt',
+							title = 'Delete'
+						)
+					return
 
 				# These 4 lines will ensure there is atleast 1 ticked checkbutton if all delete button is not ticked
 				flag=False
@@ -583,7 +590,7 @@ class expenseRecord:
 						break
 				if flag:
 					milkRecord.writeDataChronologically(self,
-					given_data=cal.selection_get().strftime('%m/%d/%Y')+'-'+data_from_file_refined,
+					given_data=cal.selection_get().strftime('%m/%d/%Y')+'-'+data_from_file_refined+'\n',
 					date=cal.selection_get().strftime('%m/%d/%Y'),
 					file_given='data2.txt',
 					title=self.title)
@@ -634,7 +641,8 @@ class expenseRecord:
 		elif self.title == 'Delete':
 			# Create tkinter variables for checkbuttons
 			var_tkk = []
-			for i in range(5):
+			var_tkk_all = tkk.IntVar()  #This variable is to delete all record
+			for i in range(6):
 				var_tkk.append(tkk.IntVar())
 
 			# Place CheckButtons for item selection
@@ -642,8 +650,11 @@ class expenseRecord:
 				tkk.Checkbutton(leftFrame, variable=var_tkk[i], bg=default_color, onvalue=1, offvalue=0).grid(row=2, column=i+1, padx=20)
 			tkk.Checkbutton(leftFrame, variable=var_tkk[4], bg=default_color, onvalue=1, offvalue=0).grid(row=4, column=2, columnspan=2, padx=20)
 
-			spec_text1 = 'Tick to delete'
-			spec_text2 = 'Other(Specify Amount)'
+			spec_text1 = 'Tick to delete individual items'
+			spec_text2 = 'Other'
+			tkk.Label(leftFrame, text='Tick to delete all record for selected date', bg=default_color).grid(row=5, columnspan=5, pady=10)
+			tkk.Checkbutton(leftFrame, variable=var_tkk_all, bg=default_color, onvalue=1, offvalue=0).grid(row=6, columnspan=5)
+
 
 		# Placing expenses titles
 		tkk.Label(leftFrame, text=spec_text1, font=('1'), bg=default_color,).grid(row=0, columnspan=5, pady=5)
@@ -651,7 +662,7 @@ class expenseRecord:
 		tkk.Label(leftFrame, text='Dana', bg=default_color,).grid(row=1, column=2)
 		tkk.Label(leftFrame, text='Aata', bg=default_color,).grid(row=1, column=3)
 		tkk.Label(leftFrame, text='Ghee', bg=default_color,).grid(row=1, column=4)
-		tkk.Label(leftFrame, text=spec_text2, font=('1'), bg=default_color,).grid(row=3, columnspan=5, pady=10)
+		tkk.Label(leftFrame, text=spec_text2, bg=default_color,).grid(row=3, columnspan=5, pady=10)
 
 
 
