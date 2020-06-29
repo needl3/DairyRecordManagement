@@ -1,2 +1,2 @@
-#Readme
-This is an application built for the analysis of Dairy Income for Farmers. It's built for personal use and meant for single individual.
+<h1>Income Analysis System for cattle farmers</h1>
+This is an application built for the analysis of dairy income and expenses for farmers. It's built for personal for single individual.
