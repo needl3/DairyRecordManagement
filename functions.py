@@ -123,29 +123,30 @@ class milkRecord:
 
 			else:
 				# First Add record at last position
-				self.writeDataChronologically(given_data=entry, file_given='data.txt', title = title)
+				self.writeDataChronologically(given_data=entry, date=self.selected_date, file_given='data.txt', title = title)
 				
 				# Then sort the whole document(I will update the algorithm later, it's a bit resource using)
 				self.writeDataChronologically(file_given='data.txt', title = title)
 
 		elif title=='Edit':
-			self.writeDataChronologically(given_data=entry+'\n', file_given='data.txt', title = title)
+			self.writeDataChronologically(given_data=entry+'\n', date=self.selected_date, file_given='data.txt', title = title)
 		else:
 			# Passing date means deleting the record of that date
 			self.writeDataChronologically(date=self.selected_date, file_given='data.txt', title = title)
 
-		self.showConfirmation(selected_date = '/'.join(date), title = title, success=True)
 
 	# To delete, call it with date parmenter.
 	# To edit, pass the editing line as given_data=editing_line .
 	def writeDataChronologically(self, given_data = None, date=None, file_given=None, title = None):
+		print(given_data, date, file_given, title)
 		if given_data == None and date == None:	#Sort all data from scratch
 			date_list = []
 			sorted_data = []
 			with open(file_given, 'r') as file:
-				data = file.read().split('\n')
+				data = file.readlines()
 			i=0
 			for datum in data:
+				print('Datum is '+datum)
 				year = int(datum.split('-')[0].split('/')[2])
 				month = int(datum.split('-')[0].split('/')[0])
 				day = int(datum.split('-')[0].split('/')[1])
@@ -189,34 +190,48 @@ class milkRecord:
 				del data[index]
 				with open(file_given, 'w') as file:
 					for i in data:
-						print(i)
 						file.write(i)
+			tkinter.messagebox.showinfo('Success', 'Record '+ title+ 'ed for ' +date)
 
 		else:		#Add the given data in the line
 			with open(file_given, 'r') as file:
 				data = file.readlines()
 
 			# Now find the date's index position
-			index=None
+			index = None
 			for i in data:
-				if i.split('-')[0] == given_data.split('-')[0]:
+				print(i.split('-')[0], given_data.split('-')[0], i.split('-')[0]==given_data.split('-')[0])
+				if i.split('-')[0] in given_data.split('-')[0]:
+					print('Inside index conditionn\n')
 					index = data.index(i)
 					break
 
+			print(index)
+			# Abort the adding process if data already exists for that date
+			if index != None and title =='Add':
+				tkinter.messagebox.showinfo('Record exists', 'Record already exists for '+date+'\nEdit the record instead of adding')
+				return
 			# Edit
-			if index != None:
+			elif index != None:
+				print('In edit')
 				del data[index]
 				data.insert(index, given_data)
+				print('Edited')
+			
+
 			# Add
 			else:
-				data.append(given_data)
+				print('In add')
+				data.append('\n'+given_data)
+				print('Added')
 			
-			print(data)
 			
 			with open(file_given, 'w') as file:
 				for datum in data:
 					file.write(datum)
 	
+			tkinter.messagebox.showinfo('Success', 'Record '+ title+ 'ed for ' +date)
+
 	# To show data store success, pass success=True
 	# To show no data, pass nothing
 	def showConfirmation(self, selected_date=None, title=None, success=False):
@@ -518,6 +533,63 @@ class expenseRecord:
 
 	def add(self, mainframe):
 
+		def writeData():
+			if self.title == 'Add' or self.title == 'Edit':
+				milkRecord.writeDataChronologically(self,
+					given_data='{}-{},{},{},{},{}'.format(cal.selection_get().strftime('%m/%d/%Y'), self.chhokarEntry.get(), self.danaEntry.get(), self.aataEntry.get(), self.gheeEntry.get(),self.otherEntry.get()),
+					date=cal.selection_get().strftime('%m/%d/%Y'),
+					file_given='data2.txt',
+					title=self.title)
+				
+			else:
+				# First get the status of checkbutton 1-ticked, 0-unticked
+				data = []
+				for i in range(5):
+					data.append(var_tkk[i].get())
+
+				# Now replace the 0 with empty string in data from file
+				with open('data2.txt', 'r') as file:
+					data_from_file = file.readlines()
+				flag = False
+				for i in data_from_file:
+					if i.split('-')[0] == cal.selection_get().strftime('%m/%d/%Y'):
+						data_from_file = i.split('-')[1].split(',')
+						flag = True
+						break
+				# If data is not found do this
+				if not flag:
+					tkinter.messagebox.showinfo('No record', 'No record found to delete for ' + cal.selection_get().strftime('%m/%d/%Y'))
+					return
+				# If data is found then write it down
+				print(data, data_from_file)
+				data_from_file_refined = []
+				for i in range(5):
+					if data[i] == 0:
+						data_from_file_refined.append(data_from_file[i])
+					else:
+						data_from_file_refined.append('')
+				data_from_file_refined = ','.join(data_from_file_refined)
+				
+				print('Final data is:  ' + str(data_from_file_refined))
+				
+				# First check for all delete condition
+
+
+				# These 4 lines will ensure there is atleast 1 ticked checkbutton if all delete button is not ticked
+				flag=False
+				for i in data_from_file_refined:
+					if i != '':
+						flag=True
+						break
+				if flag:
+					milkRecord.writeDataChronologically(self,
+					given_data=cal.selection_get().strftime('%m/%d/%Y')+'-'+data_from_file_refined,
+					date=cal.selection_get().strftime('%m/%d/%Y'),
+					file_given='data2.txt',
+					title=self.title)
+				else:
+					tkinter.messagebox.showinfo('Nothing to delete', 'Tick at least a button to delete for ' + cal.selection_get().strftime('%m/%d/%Y'))
+
 		# Placing left Frame
 		leftFrame = tkk.Frame(mainframe, bg=default_color,)
 		leftFrame.grid(row=1, column=1)
@@ -549,37 +621,29 @@ class expenseRecord:
 
 			self.otherEntry = tkk.Entry(leftFrame, width=12)
 			self.otherEntry.grid(row=4, column=2, columnspan=2)
-
-			# Extracted Data
-			ext_data = '{}-{},{},{},{},{}'.format(
+			
+			self.fetchDataButton = tkk.Button(rightFrame, text='Fetch Data', command=lambda: self.fetchData(
 				cal.selection_get().strftime('%m/%d/%Y'),
-				self.chhokarEntry.get(),
-				self.danaEntry.get(),
-				self.aataEntry.get(),
-				self.gheeEntry.get(),
-				self.otherEntry.get()
-				)
-			spec_text1 = 'Select the ones to delete'
-			spec_text2 = 'Other'
+				file_given = 'data2.txt'), bg=default_color,
+			)
+			self.fetchDataButton.grid(row=2, pady=10)
+
+			spec_text1 = 'Specify number of boras'
+			spec_text2 = 'Other(Specify Rupees)'
 		
 		elif self.title == 'Delete':
-			var_chokkar = tkk.IntVar()
-			var_dana = tkk.IntVar()
-			var_aata = tkk.IntVar()
-			var_ghee = tkk.IntVar()
-			var_others = tkk.IntVar()
+			# Create tkinter variables for checkbuttons
+			var_tkk = []
+			for i in range(5):
+				var_tkk.append(tkk.IntVar())
 
-			tkk.Checkbutton(leftFrame, variable=var_chokkar, bg=default_color, onvalue=1, offvalue=0).grid(row=2, column=1, padx=20)
-			tkk.Checkbutton(leftFrame, variable=var_dana, bg=default_color, onvalue=1, offvalue=0).grid(row=2, column=2, padx=20)
-			tkk.Checkbutton(leftFrame, variable=var_aata, bg=default_color, onvalue=1, offvalue=0).grid(row=2, column=3, padx=20)
-			tkk.Checkbutton(leftFrame, variable=var_ghee, bg=default_color, onvalue=1, offvalue=0).grid(row=2, column=4, padx=20)
-			tkk.Checkbutton(leftFrame, variable=var_others, bg=default_color, onvalue=1, offvalue=0).grid(row=4, column=2, columnspan=2, padx=20)
+			# Place CheckButtons for item selection
+			for i in range(4):
+				tkk.Checkbutton(leftFrame, variable=var_tkk[i], bg=default_color, onvalue=1, offvalue=0).grid(row=2, column=i+1, padx=20)
+			tkk.Checkbutton(leftFrame, variable=var_tkk[4], bg=default_color, onvalue=1, offvalue=0).grid(row=4, column=2, columnspan=2, padx=20)
 
-			spec_text1 = 'Specify No. of Boras'
+			spec_text1 = 'Tick to delete'
 			spec_text2 = 'Other(Specify Amount)'
-
-			ext_data =None
-
 
 		# Placing expenses titles
 		tkk.Label(leftFrame, text=spec_text1, font=('1'), bg=default_color,).grid(row=0, columnspan=5, pady=5)
@@ -590,20 +654,16 @@ class expenseRecord:
 		tkk.Label(leftFrame, text=spec_text2, font=('1'), bg=default_color,).grid(row=3, columnspan=5, pady=10)
 
 
-		self.fetchDataButton = tkk.Button(rightFrame, text='Fetch Data', command=lambda: self.fetchData(
-			cal.selection_get().strftime('%m/%d/%Y'),
-			file_given = 'data2.txt'), bg=default_color,
-		)
-		self.fetchDataButton.grid(row=2, pady=10)
 
 		addButton = tkk.Button(mainframe, text=self.title + ' Record',
 			font=('1'),
-			command = lambda: milkRecord.writeDataChronologically(self,given_data=ext_data, date=cal.selection_get().strftime('%m/%d/%Y'), file_given='data2.txt'),
+			command = writeData,
 			bg=default_color
 			)
 		addButton.grid(row=2, columnspan=3)
 
 	def fetchData(self, cal_date, file_given = None):
+		flag = False
 		try:
 			with open(file_given, 'r') as file:
 				read_data = file.readlines()
@@ -624,14 +684,15 @@ class expenseRecord:
 
 					self.otherEntry.delete(0,tkk.END)
 					self.otherEntry.insert(0,i.split('-')[1].split(',')[4])
-				else:
-					tkinter.messagebox.showinfo(
-					'No Data', 'No previous data found to '+self.title+'.\nFirst Add data for '+
-					 cal_date)
+					flag=True
 		except FileNotFoundError:
 			tkinter.messagebox.showinfo(
 					'No Data', 'No previous data found to '+self.title+'.\nFirst Add data for '+
 					 cal_date)
+		if not flag:
+			tkinter.messagebox.showinfo(
+			'No Data', 'No previous data found to '+self.title+'.\nFirst Add data for '+
+			 cal_date)
 		
 
 if __name__ == '__main__':
