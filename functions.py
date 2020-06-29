@@ -110,7 +110,7 @@ class milkRecord:
 		if title == 'Add':
 			flag=False
 			# Checks for the date selected if its already added or not
-			with open('data.txt','r') as file:
+			with open('milk_data.txt','r') as file:
 				for line in file:
 					if line.split('-')[0] == self.cal.selection_get().strftime('%m/%d/%Y'):
 						flag=True
@@ -123,16 +123,16 @@ class milkRecord:
 
 			else:
 				# First Add record at last position
-				self.writeDataChronologically(given_data=entry, date=self.selected_date, file_given='data.txt', title = title)
+				self.writeDataChronologically(given_data=entry, date=self.selected_date, file_given='milk_data.txt', title = title)
 				
 				# Then sort the whole document(I will update the algorithm later, it's a bit resource using)
-				self.writeDataChronologically(file_given='data.txt', title = title)
+				self.writeDataChronologically(file_given='milk_data.txt', title = title)
 
 		elif title=='Edit':
-			self.writeDataChronologically(given_data=entry+'\n', date=self.selected_date, file_given='data.txt', title = title)
+			self.writeDataChronologically(given_data=entry+'\n', date=self.selected_date, file_given='milk_data.txt', title = title)
 		else:
 			# Passing date means deleting the record of that date
-			self.writeDataChronologically(date=self.selected_date, file_given='data.txt', title = title)
+			self.writeDataChronologically(date=self.selected_date, file_given='milk_data.txt', title = title)
 
 
 	# To delete, call it with date parmenter.
@@ -166,12 +166,12 @@ class milkRecord:
 					if sorted_date == raw_date_temp:
 						sorted_data.append(raw_date)
 
-			with open('temp_data.txt', 'w') as file:
+			with open('temp_milk_data.txt', 'w') as file:
 				for i in sorted_data:
 					file.write(i+'\n')
 
 			os.remove(file_given)
-			os.rename('temp_data.txt',file_given)
+			os.rename('temp_milk_data.txt',file_given)
 
 		elif given_data == None and date != None:	#Delete specific data for given date
 			index = None
@@ -276,7 +276,7 @@ class milkRecord:
 		self.selected_date = self.cal.selection_get().strftime('%m/%d/%Y')
 
 		try:
-			with open('data.txt', 'r') as file1:
+			with open('milk_data.txt', 'r') as file1:
 
 				# Read through the lines
 				for num, line in enumerate(file1, 1):
@@ -335,10 +335,11 @@ class viewMilkRecord:
 
 		# Child Widgets of dateRangeFrame
 		tkk.Label(dateRangeFrame, text='From', font=('8'), padx=20, bg=default_color).grid(row=1, column=1, pady=20)
+		temp_month = 12 if int(date[1])-1 == 0 else int(date[1])-1
 		cal1 = tc.Calendar(dateRangeFrame, selectmode='day',
 			year=int(date[0]),
 			day=int(date[2]),
-			month=int(date[1])-1)
+			month=int(temp_month))
 		cal1.grid(row=1, column=2, padx=20)
 
 		tkk.Label(dateRangeFrame, text='To', font=('8'), padx=20, bg=default_color).grid(row=3, column=1, pady=20)
@@ -361,12 +362,13 @@ class viewMilkRecord:
 
 
 	def placeData(self, mainframe2, ranged_date=[]):
+		def scrollfunction(event):
+		    canvas.configure(scrollregion=canvas.bbox("all"),width=670,height=400)
+		
 		# For Scrollbar
 		myframe=tkk.LabelFrame(mainframe2,width=50,height=130,bd=1, bg=default_color)
 		myframe.grid(row=2, column=1)
 
-		def scrollfunction(event):
-		    canvas.configure(scrollregion=canvas.bbox("all"),width=670,height=400)
 
 		canvas=tkk.Canvas(myframe, bg=default_color)
 		sectionTitles=tkk.Frame(canvas, bg=default_color)
@@ -400,7 +402,7 @@ class viewMilkRecord:
 		tkk.Label(sectionTitles, text='SNF', borderwidth=2, relief = 'ridge', font=('30'), bg='cyan').grid(row=3, column=7, padx=20, pady=10)
 
 		# Read all record
-		with open('data.txt', 'r') as file:
+		with open('milk_data.txt', 'r') as file:
 			content1 = file.read()
 		
 		if len(ranged_date) != 0:
@@ -524,12 +526,12 @@ class expenseRecord:
 		root.title(title+' Expenses Record')
 		root.configure(background=default_color)
 		
-		tkk.Label(mainframe, text = title.upper() + ' EXPENSES RECORD', bg=default_color, font=('20')).grid(row=0, columnspan=4, pady=20)
+		tkk.Label(mainframe, text = title.upper() + ' EXPENSES RECORD', bg=default_color, font=('20')).grid(row=0, columnspan=10, pady=20)
 
 		if title != 'View':
 			self.add(mainframe)
 		else:
-			self.view()
+			self.view(mainframe)
 
 	def add(self, mainframe):
 
@@ -538,7 +540,7 @@ class expenseRecord:
 				milkRecord.writeDataChronologically(self,
 					given_data='{}-{},{},{},{},{}'.format(cal.selection_get().strftime('%m/%d/%Y'), self.chhokarEntry.get(), self.danaEntry.get(), self.aataEntry.get(), self.gheeEntry.get(),self.otherEntry.get()),
 					date=cal.selection_get().strftime('%m/%d/%Y'),
-					file_given='data2.txt',
+					file_given='expenses_data.txt',
 					title=self.title)
 				
 			else:
@@ -548,7 +550,7 @@ class expenseRecord:
 					data.append(var_tkk[i].get())
 
 				# Now replace the 0 with empty string in data from file
-				with open('data2.txt', 'r') as file:
+				with open('expenses_data.txt', 'r') as file:
 					data_from_file = file.readlines()
 				flag = False
 				for i in data_from_file:
@@ -577,7 +579,7 @@ class expenseRecord:
 					print('All data')
 					milkRecord.writeDataChronologically(self,
 							date=cal.selection_get().strftime('%m/%d/%Y'),
-							file_given = 'data2.txt',
+							file_given = 'expenses_data.txt',
 							title = 'Delete'
 						)
 					return
@@ -592,7 +594,7 @@ class expenseRecord:
 					milkRecord.writeDataChronologically(self,
 					given_data=cal.selection_get().strftime('%m/%d/%Y')+'-'+data_from_file_refined+'\n',
 					date=cal.selection_get().strftime('%m/%d/%Y'),
-					file_given='data2.txt',
+					file_given='expenses_data.txt',
 					title=self.title)
 				else:
 					tkinter.messagebox.showinfo('Nothing to delete', 'Tick at least a button to delete for ' + cal.selection_get().strftime('%m/%d/%Y'))
@@ -631,7 +633,7 @@ class expenseRecord:
 			
 			self.fetchDataButton = tkk.Button(rightFrame, text='Fetch Data', command=lambda: self.fetchData(
 				cal.selection_get().strftime('%m/%d/%Y'),
-				file_given = 'data2.txt'), bg=default_color,
+				file_given = 'expenses_data.txt'), bg=default_color,
 			)
 			self.fetchDataButton.grid(row=2, pady=10)
 
@@ -704,11 +706,156 @@ class expenseRecord:
 			tkinter.messagebox.showinfo(
 			'No Data', 'No previous data found to '+self.title+'.\nFirst Add data for '+
 			 cal_date)
+	# Lists the total expenses between two selected dates
+	def view(self, mainframe):
+		current_date = datetime.datetime.now().strftime('%m/%d/%Y')
 		
+		# Parent Frames for view mosule
+		leftFrame = tkk.LabelFrame(mainframe, bg=default_color)
+		leftFrame.grid(row=1, column=1, padx=20)
+		tkk.Label(leftFrame, text='List of Records', font=('1'), bg=default_color).grid(row=0, columnspan=10, pady=20)
+
+		rightFrame = tkk.LabelFrame(mainframe, bg=default_color, text='Set Date Range')
+		rightFrame.grid(row=1, column=2)
+
+		# Right frame contents
+		# Child Widgets of dateRangeFrame
+		tkk.Label(rightFrame, text='From', font=('8'), padx=20, bg=default_color).grid(row=1, column=1, pady=20)
+		temp_month = 12 if int(date[1])-1 ==0 else int(date[1])-1
+		cal1 = tc.Calendar(rightFrame, selectmode='day',
+			year=int(date[0]),
+			day=int(date[2]),
+			month=int(temp_month))
+		cal1.grid(row=1, column=2, padx=20)
+
+		tkk.Label(rightFrame, text='To', font=('8'), padx=20, bg=default_color).grid(row=3, column=1, pady=20)
+		cal2 = tc.Calendar(rightFrame, selectmode='day',
+			year=int(date[0]),
+			day=int(date[2]),
+			month=int(date[1]))
+		cal2.grid(row=3, column=2, pady=20, padx=20)
+		
+		setButton = tkk.Button(
+			rightFrame,
+			text='Set Range',
+			bg=default_color,
+			command = lambda: setRange(
+				leftFrame,
+				cal1.selection_get(),
+				cal2.selection_get())
+			)
+		setButton.grid(row=4, columnspan=3)
+		
+
+
+		# Contents of the headins
+		def setRange(mainframe, date1, date2):
+			print('Range set as: ' + str(date1) +'   '+str(date2))
+			intended_dates = [date1+datetime.timedelta(days=i) for i in range((date2-date1).days+1)]
+			placeData(mainframe, intended_dates)
+
+		def placeData(mainframe, ranged_date=[]):
+
+			# Left Frame Contents
+			# First make scrollable section
+			def scrollfunction(event):
+			    canvas.configure(scrollregion=canvas.bbox("all"),width=670,height=400)
+			# For Scrollbar
+			myframe=tkk.LabelFrame(mainframe,width=50,height=130,bd=1, bg=default_color)
+			myframe.grid(row=1, columnspan=10)
+
+
+			canvas=tkk.Canvas(myframe, bg=default_color)
+			sectionTitles=tkk.Frame(canvas, bg=default_color)
+			scrollbar=tkk.Scrollbar(myframe,orient="vertical",command=canvas.yview)
+			canvas.configure(yscrollcommand=scrollbar.set)
+
+			scrollbar.pack(side="right",fill="y")
+			canvas.pack(side="left")
+			canvas.create_window((0,0),window=sectionTitles,anchor='nw')
+			sectionTitles.bind("<Configure>",scrollfunction)
+
+			# Heading of list
+			tkk.Label(sectionTitles, text='S.N', bg=default_color).grid(row=1, column=1, padx=20, pady=20)
+			tkk.Label(sectionTitles, text='Date', bg=default_color).grid(row=1, column=2, padx=20, pady=20)
+			tkk.Label(sectionTitles, text='Chhokar(Bora)', bg=default_color).grid(row=1, column=3, padx=20, pady=20)
+			tkk.Label(sectionTitles, text='Dana(Bora)', bg=default_color).grid(row=1, column=4, padx=20, pady=20)
+			tkk.Label(sectionTitles, text='Aata(Bag)', bg=default_color).grid(row=1, column=5, padx=20, pady=20)
+			tkk.Label(sectionTitles, text='Ghee(Jar)', bg=default_color).grid(row=1, column=6, padx=20, pady=20)
+			tkk.Label(sectionTitles, text='Other(Rs.)', bg=default_color).grid(row=1, column=7, padx=20, pady=20)
+
+			# First read data
+			with open('expenses_data.txt', 'r') as file:
+				content1 = file.readlines()
+
+			# Check if user has clicked set date button or the window is openes first time
+			if len(ranged_date) != 0:
+				ranged_date_refined = [i.strftime('%m/%d/%Y') for i in ranged_date]
+			# If set button is pressed
+			else:
+				# Get the dates from today to last month
+				today = datetime.date.today()
+				first = today.replace(day=1)
+				lastMonth = first - datetime.timedelta(days=1)
+				delta = today-lastMonth
+
+				ranged_date_refined = [lastMonth+datetime.timedelta(days=i) for i in range(delta.days+1)]
+				ranged_date_refined = [i.strftime('%m/%d/%Y') for i in ranged_date_refined]
+
+			content=[]
+			for line in content1:
+				if line.split('-')[0] in ranged_date_refined:
+					content.append(line)
+			# 'content' is the data to be displayed
+			ro=2
+			total_chokkar = 0
+			total_dana = 0
+			total_aata = 0
+			total_ghee = 0
+			total_other_expenses = 0
+			# this loop will place all available datas between given range
+			# ?Also will calculate total of all entities
+			for i in content:
+				i = i.split('-')
+				others = i[1].split(',')
+				tkk.Label(sectionTitles, text=ro-1, bg=default_color).grid(row=ro, column=1)
+				tkk.Label(sectionTitles, text=i[0], bg=default_color).grid(row=ro, column=2)
+				tkk.Label(sectionTitles, text=others[0], bg=default_color).grid(row=ro, column=3)
+				tkk.Label(sectionTitles, text=others[1], bg=default_color).grid(row=ro, column=4)
+				tkk.Label(sectionTitles, text=others[2], bg=default_color).grid(row=ro, column=5)
+				tkk.Label(sectionTitles, text=others[3], bg=default_color).grid(row=ro, column=6)
+				tkk.Label(sectionTitles, text=others[4], bg=default_color).grid(row=ro, column=7)
+				ro+=1
+		
+				# Update the 'total' entities
+				total_chokkar = total_chokkar+int(others[0]) if others[0] != '' else total_chokkar+0
+				total_dana = total_dana+int(others[1]) if others[1] != '' else total_dana+0
+				total_aata = total_aata+int(others[2]) if others[2] != '' else total_aata+0
+				total_ghee = total_ghee+int(others[3]) if others[3] != '' else total_ghee+0
+				total_other_expenses = total_other_expenses+int(others[4]) if others[4] != '' else total_ghee+0
+
+			# Place the section to display total of all these
+			# Title of total expenses
+			tkk.Label(leftFrame, text='Total Chokkar(Boras)', bg=default_color).grid(row=2, column=1, padx=5, pady=20)
+			tkk.Label(leftFrame, text='Total Dana(Boras)', bg=default_color).grid(row=2, column=2, padx=5, pady=20)
+			tkk.Label(leftFrame, text='Total Aata(Bag)', bg=default_color).grid(row=2, column=3, padx=5, pady=20)
+			tkk.Label(leftFrame, text='Total Ghee(Box)', bg=default_color).grid(row=2, column=4, padx=5, pady=20)
+			tkk.Label(leftFrame, text='Total other expenses', bg=default_color).grid(row=2, column=5, padx=5, pady=20)
+			tkk.Label(leftFrame, text='Total Net Expenses', bg=default_color).grid(row=2, column=6, padx=50, pady=20)
+			# Value of totalExpenses
+			chokkar_entry = tkk.Entry(leftFrame, width=10, text=total_chokkar)
+			dana_entry = tkk.Entry(leftFrame, width=10)
+			aata_entry = tkk.Entry(leftFrame, width=10)
+			ghee_entry = tkk.Entry(leftFrame, width=10)
+			other_entry = tkk.Entry(leftFrame, width=10)
+
+		# initially place the data from today to previous month
+		placeData(leftFrame)
+
 
 if __name__ == '__main__':
 	root = tkk.Tk()
 	mainframe = tkk.LabelFrame(root, border=2)
-	expenseRecord('Delete', root, mainframe)
+	expenseRecord('View', root, mainframe)
 	root.mainloop()
 
