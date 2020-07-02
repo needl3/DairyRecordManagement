@@ -1,0 +1,5 @@
+dairy_pricing_coefecient=57.11,4,8
+chokkar_price=1500
+dana_price=1700
+aata_price=800
+ghee_price=1000

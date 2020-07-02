@@ -2,7 +2,6 @@ import tkinter as tkk, tkcalendar as tc, tkinter.messagebox, os, datetime
 
 # Global variables
 default_color = '#d1fcf1'
-dairy_pricing_coefecient = (57.11/(4*8))
 
 # Get todays date in list format Y/M/D
 date = datetime.date.today().strftime('%Y/%m/%d').split('/')
@@ -14,7 +13,7 @@ class milkRecord:
 		self.root.title(title + ' Milk Record')
 
 		self.mainframe1 = mainframe1
-		self.headingLabel = tkk.Label(self.mainframe1, text=title.upper() + ' MILK RECORD', font=('30'), bg=default_color)
+		self.headingLabel = tkk.Label(self.mainframe1, text=title.upper() + ' MILK RECORD', font=('1'), bg=default_color)
 
 		# Left Frame from here
 		self.lFrame = tkk.LabelFrame(self.mainframe1, bg=default_color)
@@ -39,7 +38,7 @@ class milkRecord:
 			self.fetchDataButton = tkk.Button(self.rFrame, text='Check Data', command = self.fetchDataMilk, width=20, bg=default_color)
 		# Add Record Button
 		self.doneButton = tkk.Button(
-			self.mainframe1, text=title + ' Record', font=('10'), height=3, width=100,
+			self.mainframe1, text=title + ' Record', font=('1'), height=3, width=100,
 			command = lambda: self.recordAddedMilk(title), bg=default_color)
 
 		
@@ -386,20 +385,20 @@ class viewMilkRecord:
 
 		
 		# Date
-		tkk.Label(sectionTitles, text='S.N', borderwidth =2, relief='ridge', font=('30'), bg='cyan').grid(row=2, column=0, rowspan=2, padx=20)
-		tkk.Label(sectionTitles, text='Date', borderwidth=2, relief='ridge', font=('30'), bg='cyan').grid(row=2, column=1, rowspan=2, padx=40)
+		tkk.Label(sectionTitles, text='S.N', borderwidth =2, relief='ridge', font=('1'), bg='cyan').grid(row=2, column=0, rowspan=2, padx=20)
+		tkk.Label(sectionTitles, text='Date', borderwidth=2, relief='ridge', font=('1'), bg='cyan').grid(row=2, column=1, rowspan=2, padx=40)
 
 		# Morning section
-		tkk.Label(sectionTitles, text='MORNING', borderwidth=2, relief = 'ridge', font=('30'), bg='cyan').grid(row=2, column=2, columnspan=3, padx=40)
-		tkk.Label(sectionTitles, text='LITRE', borderwidth=2, relief = 'ridge', font=('30'), bg='cyan').grid(row=3, column=2, padx=20, pady=10)
-		tkk.Label(sectionTitles, text='FAT', borderwidth=2, relief = 'ridge', font=('30'), bg='cyan').grid(row=3, column=3, padx=20, pady=10)
-		tkk.Label(sectionTitles, text='SNF', borderwidth=2, relief = 'ridge', font=('30'), bg='cyan').grid(row=3, column=4, padx=20, pady=10)
+		tkk.Label(sectionTitles, text='MORNING', borderwidth=2, relief = 'ridge', font=('1'), bg='cyan').grid(row=2, column=2, columnspan=3, padx=40)
+		tkk.Label(sectionTitles, text='LITRE', borderwidth=2, relief = 'ridge', font=('1'), bg='cyan').grid(row=3, column=2, padx=20, pady=10)
+		tkk.Label(sectionTitles, text='FAT', borderwidth=2, relief = 'ridge', font=('1'), bg='cyan').grid(row=3, column=3, padx=20, pady=10)
+		tkk.Label(sectionTitles, text='SNF', borderwidth=2, relief = 'ridge', font=('1'), bg='cyan').grid(row=3, column=4, padx=20, pady=10)
 
 		# Evening Section
-		tkk.Label(sectionTitles, text='EVENING', borderwidth=2, relief = 'ridge', font=('30'), bg='cyan').grid(row=2, column=5, columnspan=4, padx=40)
-		tkk.Label(sectionTitles, text='LITRE', borderwidth=2, relief = 'ridge', font=('30'), bg='cyan').grid(row=3, column=5, padx=20, pady=10)
-		tkk.Label(sectionTitles, text='FAT', borderwidth=2, relief = 'ridge', font=('30'), bg='cyan').grid(row=3, column=6, padx=20, pady=10)
-		tkk.Label(sectionTitles, text='SNF', borderwidth=2, relief = 'ridge', font=('30'), bg='cyan').grid(row=3, column=7, padx=20, pady=10)
+		tkk.Label(sectionTitles, text='EVENING', borderwidth=2, relief = 'ridge', font=('1'), bg='cyan').grid(row=2, column=5, columnspan=4, padx=40)
+		tkk.Label(sectionTitles, text='LITRE', borderwidth=2, relief = 'ridge', font=('1'), bg='cyan').grid(row=3, column=5, padx=20, pady=10)
+		tkk.Label(sectionTitles, text='FAT', borderwidth=2, relief = 'ridge', font=('1'), bg='cyan').grid(row=3, column=6, padx=20, pady=10)
+		tkk.Label(sectionTitles, text='SNF', borderwidth=2, relief = 'ridge', font=('1'), bg='cyan').grid(row=3, column=7, padx=20, pady=10)
 
 		# Read all record
 		with open('milk_data.txt', 'r') as file:
@@ -439,20 +438,20 @@ class viewMilkRecord:
 			eveningMilk = lines[2].split(',')
 
 			# Displays Number
-			tkk.Label(sectionTitles, text=str(ro-3), font=('20'), bg=default_color).grid(row=ro, column=0, pady=10)
+			tkk.Label(sectionTitles, text=str(ro-3), font=('1'), bg=default_color).grid(row=ro, column=0, pady=10)
 
 			# Displays date
-			tkk.Label(sectionTitles, text=date_to_be_displayed, font=('20'), bg=default_color).grid(row = ro, column = 1, pady=10)
+			tkk.Label(sectionTitles, text=date_to_be_displayed, font=('1'), bg=default_color).grid(row = ro, column = 1, pady=10)
 			
 			# Morning Data
-			tkk.Label(sectionTitles, text=morningMilk[0], font=('20'), bg=default_color).grid(row=ro, column=2, pady=10)
-			tkk.Label(sectionTitles, text=morningMilk[1], font=('20'), bg=default_color).grid(row=ro, column=3, pady=10)
-			tkk.Label(sectionTitles, text=morningMilk[2], font=('20'), bg=default_color).grid(row=ro, column=4, pady=10)
+			tkk.Label(sectionTitles, text=morningMilk[0], font=('1'), bg=default_color).grid(row=ro, column=2, pady=10)
+			tkk.Label(sectionTitles, text=morningMilk[1], font=('1'), bg=default_color).grid(row=ro, column=3, pady=10)
+			tkk.Label(sectionTitles, text=morningMilk[2], font=('1'), bg=default_color).grid(row=ro, column=4, pady=10)
 
 			# Evening Data
-			tkk.Label(sectionTitles, text=eveningMilk[0], font=('20'), bg=default_color).grid(row=ro, column=5, pady=10)
-			tkk.Label(sectionTitles, text=eveningMilk[1], font=('20'), bg=default_color).grid(row=ro, column=6, pady=10)
-			tkk.Label(sectionTitles, text=eveningMilk[2], font=('20'), bg=default_color).grid(row=ro, column=7, pady=10)
+			tkk.Label(sectionTitles, text=eveningMilk[0], font=('1'), bg=default_color).grid(row=ro, column=5, pady=10)
+			tkk.Label(sectionTitles, text=eveningMilk[1], font=('1'), bg=default_color).grid(row=ro, column=6, pady=10)
+			tkk.Label(sectionTitles, text=eveningMilk[2], font=('1'), bg=default_color).grid(row=ro, column=7, pady=10)
 			ro += 1
 			if morningMilk[1] != '':
 				fatCount += 1
@@ -481,6 +480,13 @@ class viewMilkRecord:
 		# Calculate income based on current pricing scheme
 		# of respective dairy companies in this case it's safal dairy
 		# Data is that 
+
+		# Calculate Dairy pricing coefficient using the data provided
+		with open('priceData.txt', 'r') as file:
+			read_data = file.readlines()
+		dairy_pricing_coefecient = read_data[0].split('=')[1].strip().split(',')
+		dairy_pricing_coefecient = [float(i) for i in dairy_pricing_coefecient]
+		dairy_pricing_coefecient = dairy_pricing_coefecient[0]/(dairy_pricing_coefecient[1]*dairy_pricing_coefecient[2])
 
 		expectedIncome = round(totalMilk * dairy_pricing_coefecient * averageFat * averageSnf, 3)
 
@@ -519,14 +525,16 @@ class viewMilkRecord:
 	def setRange(self, mainframe2, date1, date2):
 		intended_dates = [date1+datetime.timedelta(days=i) for i in range((date2-date1).days+1)]
 		self.placeData(mainframe2, intended_dates)
+
 class expenseRecord:
 	def __init__(self, title, root, mainframe):
 		self.title = title
 		mainframe.grid(row=1)
+		mainframe.configure(border=0)
 		root.title(title+' Expenses Record')
 		root.configure(background=default_color)
 		
-		tkk.Label(mainframe, text = title.upper() + ' EXPENSES RECORD', bg=default_color, font=('20')).grid(row=0, columnspan=10, pady=20)
+		tkk.Label(mainframe, text = title.upper() + ' EXPENSES RECORD', bg=default_color, font=('1')).grid(row=0, columnspan=10, pady=20)
 
 		if title != 'View':
 			self.add(mainframe)
@@ -713,7 +721,7 @@ class expenseRecord:
 		# Parent Frames for view mosule
 		leftFrame = tkk.LabelFrame(mainframe, bg=default_color)
 		leftFrame.grid(row=1, column=1, padx=20)
-		tkk.Label(leftFrame, text='List of Records', font=('1'), bg=default_color).grid(row=0, columnspan=10, pady=20)
+		tkk.Label(leftFrame, text='List of Records', font=("Helvetica", "16"), bg=default_color).grid(row=0, columnspan=10, pady=20)
 
 		rightFrame = tkk.LabelFrame(mainframe, bg=default_color, text='Set Date Range')
 		rightFrame.grid(row=1, column=2)
@@ -776,13 +784,13 @@ class expenseRecord:
 			sectionTitles.bind("<Configure>",scrollfunction)
 
 			# Heading of list
-			tkk.Label(sectionTitles, text='S.N', bg=default_color).grid(row=1, column=1, padx=20, pady=20)
-			tkk.Label(sectionTitles, text='Date', bg=default_color).grid(row=1, column=2, padx=20, pady=20)
-			tkk.Label(sectionTitles, text='Chhokar(Bora)', bg=default_color).grid(row=1, column=3, padx=20, pady=20)
-			tkk.Label(sectionTitles, text='Dana(Bora)', bg=default_color).grid(row=1, column=4, padx=20, pady=20)
-			tkk.Label(sectionTitles, text='Aata(Bag)', bg=default_color).grid(row=1, column=5, padx=20, pady=20)
-			tkk.Label(sectionTitles, text='Ghee(Jar)', bg=default_color).grid(row=1, column=6, padx=20, pady=20)
-			tkk.Label(sectionTitles, text='Other(Rs.)', bg=default_color).grid(row=1, column=7, padx=20, pady=20)
+			tkk.Label(sectionTitles, text='S.N', bg=default_color, font=("Georgia", "11")).grid(row=1, column=1, padx=20, pady=20)
+			tkk.Label(sectionTitles, text='Date', bg=default_color, font=("Georgia", "11")).grid(row=1, column=2, padx=20, pady=20)
+			tkk.Label(sectionTitles, text='Chhokar(Bora)', bg=default_color, font=("Georgia", "11")).grid(row=1, column=3, padx=20, pady=20)
+			tkk.Label(sectionTitles, text='Dana(Bora)', bg=default_color, font=("Georgia", "11")).grid(row=1, column=4, padx=20, pady=20)
+			tkk.Label(sectionTitles, text='Aata(Bag)', bg=default_color, font=("Georgia", "11")).grid(row=1, column=5, padx=20, pady=20)
+			tkk.Label(sectionTitles, text='Ghee(Jar)', bg=default_color, font=("Georgia", "11")).grid(row=1, column=6, padx=20, pady=20)
+			tkk.Label(sectionTitles, text='Other(Rs.)', bg=default_color, font=("Georgia", "11")).grid(row=1, column=7, padx=20, pady=20)
 
 			# First read data
 			with open('expenses_data.txt', 'r') as file:
@@ -834,28 +842,408 @@ class expenseRecord:
 				total_ghee = total_ghee+int(others[3]) if others[3] != '' else total_ghee+0
 				total_other_expenses = total_other_expenses+int(others[4]) if others[4] != '' else total_ghee+0
 
+			with open('priceData.txt','r') as file:
+				read_data = file.readlines()
+			read_data = read_data[1:5]
+			read_data = [int(i.split('=')[1].strip()) for i in read_data]
+
+			# Calculate total net expenses
+			total_net_expenses = total_chokkar*read_data[0]+total_dana*read_data[1]+total_aata*read_data[2]+total_ghee*read_data[3]+total_other_expenses
+
 			# Place the section to display total of all these
 			# Title of total expenses
-			tkk.Label(leftFrame, text='Total Chokkar(Boras)', bg=default_color).grid(row=2, column=1, padx=5, pady=20)
-			tkk.Label(leftFrame, text='Total Dana(Boras)', bg=default_color).grid(row=2, column=2, padx=5, pady=20)
-			tkk.Label(leftFrame, text='Total Aata(Bag)', bg=default_color).grid(row=2, column=3, padx=5, pady=20)
-			tkk.Label(leftFrame, text='Total Ghee(Box)', bg=default_color).grid(row=2, column=4, padx=5, pady=20)
-			tkk.Label(leftFrame, text='Total other expenses', bg=default_color).grid(row=2, column=5, padx=5, pady=20)
-			tkk.Label(leftFrame, text='Total Net Expenses', bg=default_color).grid(row=2, column=6, padx=50, pady=20)
+			tkk.Label(leftFrame, text='Total Chokkar(Boras)', bg=default_color).grid(row=2, column=1, padx=5, pady=10)
+			tkk.Label(leftFrame, text='Total Dana(Boras)', bg=default_color).grid(row=2, column=2, padx=5, pady=10)
+			tkk.Label(leftFrame, text='Total Aata(Bag)', bg=default_color).grid(row=2, column=3, padx=5, pady=10)
+			tkk.Label(leftFrame, text='Total Ghee(Box)', bg=default_color).grid(row=2, column=4, padx=5, pady=10)
+			tkk.Label(leftFrame, text='Total other expenses(Rs.)', bg=default_color).grid(row=2, column=5, padx=5, pady=10)
+			tkk.Label(leftFrame, text='Total Net Expenses(Rs)', bg=default_color).grid(row=2, column=6, padx=50, pady=10)
 			# Value of totalExpenses
-			chokkar_entry = tkk.Entry(leftFrame, width=10, text=total_chokkar)
-			dana_entry = tkk.Entry(leftFrame, width=10)
-			aata_entry = tkk.Entry(leftFrame, width=10)
-			ghee_entry = tkk.Entry(leftFrame, width=10)
-			other_entry = tkk.Entry(leftFrame, width=10)
+			chokkar_entry = tkk.Entry(leftFrame, width=10, bg=default_color, font=("Helvetica", "10"))
+			dana_entry = tkk.Entry(leftFrame, width=10, bg=default_color, font=("Helvetica", "10"))
+			aata_entry = tkk.Entry(leftFrame, width=10, bg=default_color, font=("Helvetica", "10"))
+			ghee_entry = tkk.Entry(leftFrame, width=10, bg=default_color, font=("Helvetica", "10"))
+			other_entry = tkk.Entry(leftFrame, width=10, bg=default_color, font=("Helvetica", "10"))
+			total_net_entry = tkk.Entry(leftFrame, width=15, bg=default_color, font=("Helvetica", "10"))
 
+			chokkar_entry.insert(0,total_chokkar)
+			dana_entry.insert(0,total_dana)
+			aata_entry.insert(0,total_aata)
+			ghee_entry.insert(0,total_ghee)
+			other_entry.insert(0,total_other_expenses)
+			total_net_entry.insert(0,total_net_expenses)
+
+			chokkar_entry.configure(state='readonly')
+			dana_entry.configure(state='readonly')
+			aata_entry.configure(state='readonly')
+			ghee_entry.configure(state='readonly')
+			other_entry.configure(state='readonly')
+			total_net_entry.configure(state='readonly')
+
+			chokkar_entry.grid(row=3, column=1)
+			dana_entry.grid(row=3, column=2)
+			aata_entry.grid(row=3, column=3)
+			ghee_entry.grid(row=3, column=4)
+			other_entry.grid(row=3, column=5)
+			total_net_entry.grid(row=3, column=6)
 		# initially place the data from today to previous month
 		placeData(leftFrame)
 
+class showNetIncome:
+	def __init__(self, title, root, mainframe):
+		root.title('Net Income')
+		mainframe.grid(row=2)
+		mainframe.configure(border=0)
+
+		tkk.Label(mainframe, text='Net Income Section', font=('Georgia','16'), bg=default_color).grid(row=1, columnspan=20, pady=10)
+		leftFrame = tkk.LabelFrame(mainframe, border=0, bg=default_color)
+		leftFrame.grid(row=2, column=1)
+
+		rightFrame = tkk.LabelFrame(mainframe, text='Set Date Range', bg=default_color)
+		rightFrame.grid(row=2, column=2)
+
+		# Right frame contents
+		tkk.Label(rightFrame, text='From', font=('1'), padx=20, bg=default_color).grid(row=1, column=1, pady=20)
+		temp_month = 12 if int(date[1])-1 ==0 else int(date[1])-1
+		cal1 = tc.Calendar(rightFrame, selectmode='day',
+			year=int(date[0]),
+			day=int(date[2]),
+			month=int(temp_month))
+		cal1.grid(row=1, column=2, padx=20)
+
+		tkk.Label(rightFrame, text='To', font=('1'), padx=20, bg=default_color).grid(row=3, column=1, pady=20)
+		cal2 = tc.Calendar(rightFrame, selectmode='day',
+			year=int(date[0]),
+			day=int(date[2]),
+			month=int(date[1]))
+		cal2.grid(row=3, column=2, pady=20, padx=20)
+		
+		setButton = tkk.Button(
+			rightFrame,
+			text='Set Range',
+			bg=default_color,
+			command = lambda: self.setRange(
+				leftFrame,
+				cal1.selection_get(),
+				cal2.selection_get())
+			)
+		setButton.grid(row=4, columnspan=3)
+
+		# leftframe contents
+		self.left_leftFrame = tkk.LabelFrame(leftFrame, border=0, bg=default_color)
+		self.left_leftFrame.grid(row=1, column=1)
+		tkk.Label(self.left_leftFrame, text='Milk Record', font=('Helvetica','15'), bg=default_color).grid(row=0, columnspan=10)
+
+		self.right_leftFrame = tkk.LabelFrame(leftFrame, border=0, bg=default_color)
+		self.right_leftFrame.grid(row=1, column=2, sticky='n')
+		tkk.Label(self.right_leftFrame, text='Expense Record', font=('Helvetica','15'), bg=default_color).grid(row=0, columnspan=10)
+
+		self.placeDataMilk(self.left_leftFrame, ranged_date = [cal1.selection_get()+datetime.timedelta(days=i) for i in range((cal1.selection_get()-cal2.selection_get()).days+1)])
+		self.placeDataExpense(self.right_leftFrame, ranged_date = [cal1.selection_get()+datetime.timedelta(days=i) for i in range((cal1.selection_get()-cal2.selection_get()).days+1)])
+		self.controlPanel(mainframe)
+
+	def placeDataMilk(self, mainframe2, ranged_date=[]):
+		def scrollfunction(event):
+		    canvas.configure(scrollregion=canvas.bbox("all"),width=350,height=400)
+		
+		# For Scrollbar
+		myframe=tkk.LabelFrame(mainframe2,width=50,height=130,bd=1, bg=default_color)
+		myframe.grid(row=2, column=1)
+
+		canvas=tkk.Canvas(myframe, bg=default_color)
+		sectionTitles=tkk.Frame(canvas, bg=default_color)
+		scrollbar=tkk.Scrollbar(myframe,orient="vertical",command=canvas.yview)
+		canvas.configure(yscrollcommand=scrollbar.set)
+
+		scrollbar.pack(side="right",fill="y")
+		canvas.pack(side="left")
+		canvas.create_window((0,0),window=sectionTitles,anchor='nw')
+		sectionTitles.bind("<Configure>",scrollfunction)
+
+		# # Section titles
+		# sectionTitles = tkk.LabelFrame(canvas, border=2, bg=default_color)
+		# sectionTitles.pack(side='left')
+
+		
+		# Date
+		tkk.Label(sectionTitles, text='S.N', borderwidth =2, relief='ridge', bg='cyan').grid(row=2, column=0, rowspan=2, padx=5)
+		tkk.Label(sectionTitles, text='Date', borderwidth=2, relief='ridge', bg='cyan').grid(row=2, column=1, rowspan=2, padx=5)
+
+		# Morning section
+		tkk.Label(sectionTitles, text='MORNING', borderwidth=2, relief = 'ridge', bg='cyan').grid(row=2, column=2, columnspan=3, padx=5)
+		tkk.Label(sectionTitles, text='LITRE', borderwidth=2, relief = 'ridge', bg='cyan').grid(row=3, column=2, padx=5, pady=10)
+		tkk.Label(sectionTitles, text='FAT', borderwidth=2, relief = 'ridge', bg='cyan').grid(row=3, column=3, padx=5, pady=10)
+		tkk.Label(sectionTitles, text='SNF', borderwidth=2, relief = 'ridge', bg='cyan').grid(row=3, column=4, padx=5, pady=10)
+
+		# Evening Section
+		tkk.Label(sectionTitles, text='EVENING', borderwidth=2, relief = 'ridge', bg='cyan').grid(row=2, column=5, columnspan=4, padx=5)
+		tkk.Label(sectionTitles, text='LITRE', borderwidth=2, relief = 'ridge', bg='cyan').grid(row=3, column=5, padx=5, pady=10)
+		tkk.Label(sectionTitles, text='FAT', borderwidth=2, relief = 'ridge', bg='cyan').grid(row=3, column=6, padx=5, pady=10)
+		tkk.Label(sectionTitles, text='SNF', borderwidth=2, relief = 'ridge', bg='cyan').grid(row=3, column=7, padx=5, pady=10)
+
+		# Read all record
+		with open('milk_data.txt', 'r') as file:
+			content1 = file.readlines()
+		
+		if len(ranged_date) != 0:
+			ranged_date_refined = [i.strftime('%m/%d/%Y') for i in ranged_date]
+		else:
+			# Get the dates from today to last month
+			today = datetime.date.today()
+			first = today.replace(day=1)
+			lastMonth = first - datetime.timedelta(days=1)
+			delta = today-lastMonth
+
+			ranged_date_refined = [lastMonth+datetime.timedelta(days=i) for i in range(delta.days+1)]
+			ranged_date_refined = [i.strftime('%m/%d/%Y') for i in ranged_date_refined]
+
+		# content1 = content1.split('\n')
+		content=[]
+		for line in content1:
+			if line.split('-')[0] in ranged_date_refined:
+				content.append(line)
+			# Write an algorithm to store the data
+			# of dates between max and min dates
+
+		ro = 4
+		fatCount=0
+		totalMilk = 0
+		averageFat = 0
+		averageSnf = 0
+		for lines in content:
+			lines = lines.split('-')
+
+			# Datas
+			date_to_be_displayed = lines[0]
+			morningMilk = lines[1].split(',')
+			eveningMilk = lines[2].split(',')
+
+			# Displays Number
+			tkk.Label(sectionTitles, text=str(ro-3), bg=default_color).grid(row=ro, column=0)
+
+			# Displays date
+			tkk.Label(sectionTitles, text=date_to_be_displayed, bg=default_color).grid(row = ro, column = 1)
+			
+			# Morning Data
+			tkk.Label(sectionTitles, text=morningMilk[0], bg=default_color).grid(row=ro, column=2)
+			tkk.Label(sectionTitles, text=morningMilk[1], bg=default_color).grid(row=ro, column=3)
+			tkk.Label(sectionTitles, text=morningMilk[2], bg=default_color).grid(row=ro, column=4)
+
+			# Evening Data
+			tkk.Label(sectionTitles, text=eveningMilk[0], bg=default_color).grid(row=ro, column=5)
+			tkk.Label(sectionTitles, text=eveningMilk[1], bg=default_color).grid(row=ro, column=6)
+			tkk.Label(sectionTitles, text=eveningMilk[2], bg=default_color).grid(row=ro, column=7)
+			ro += 1
+			if morningMilk[1] != '':
+				fatCount += 1
+			if eveningMilk[1] != '':
+				fatCount += 1
+
+			if morningMilk[0] == '':
+				morningMilk[0] = 0
+			if eveningMilk[0] == '':
+				eveningMilk[0] = 0
+			totalMilk += float(morningMilk[0])+float(eveningMilk[0])
+
+			if morningMilk[1] != '':
+				averageFat += float(morningMilk[1])
+			if eveningMilk[1] != '':
+				averageFat += float(eveningMilk[1])
+
+			if morningMilk[2] != '':
+				averageSnf += float(morningMilk[2])
+			if eveningMilk[2] != '':
+				averageSnf += float(eveningMilk[2])
+
+		averageFat = round(averageFat/fatCount, 3)
+		averageSnf = round(averageSnf/fatCount, 3)
+
+		# Calculate income based on current pricing scheme
+		# of respective dairy companies in this case it's safal dairy
+		# Data is that 
+
+		# Calculate Dairy pricing coefficient using the data provided
+		with open('priceData.txt', 'r') as file:
+			read_data = file.readlines()
+		dairy_pricing_coefecient = read_data[0].split('=')[1].strip().split(',')
+		dairy_pricing_coefecient = [float(i) for i in dairy_pricing_coefecient]
+		dairy_pricing_coefecient = dairy_pricing_coefecient[0]/(dairy_pricing_coefecient[1]*dairy_pricing_coefecient[2])
+		print(dairy_pricing_coefecient)
+
+		expectedIncome = round(totalMilk * dairy_pricing_coefecient * averageFat * averageSnf, 3)
+
+		# Frame for displaying total quantities of elements
+		totalFrame = tkk.Frame(mainframe2, bg=default_color)
+		totalFrame.grid(row=3, column=1, pady=20)
+		
+		# Title Labels
+		tkk.Label(totalFrame, text='Total Litres', bg=default_color).grid(row = 1, column=1, padx=5)
+		tkk.Label(totalFrame, text='Average Fat', bg=default_color).grid(row = 1, column=2, padx=5)
+		tkk.Label(totalFrame, text='Average SNF', bg=default_color).grid(row = 1, column=3, padx=5)
+		tkk.Label(totalFrame, text='Expected Income', bg=default_color).grid(row = 1, column=4, padx=5)
+
+		# Labels values
+		litreEntry = tkk.Entry(totalFrame, width = 10, bg=default_color)
+		fatEntry = tkk.Entry(totalFrame, width = 10, bg=default_color)
+		snfEntry = tkk.Entry(totalFrame, width = 10, bg=default_color)
+		expectedIncomeEntry = tkk.Entry(totalFrame, width=15, bg=default_color)
+
+		litreEntry.insert(0, totalMilk)
+		fatEntry.insert(0, averageFat)
+		snfEntry.insert(0, averageSnf)
+		expectedIncomeEntry.insert(0, expectedIncome)
+
+		litreEntry.configure(state='readonly')
+		fatEntry.configure(state='readonly')
+		snfEntry.configure(state='readonly')
+		expectedIncomeEntry.configure(state='readonly')
+
+		litreEntry.grid(row=2, column=1)
+		fatEntry.grid(row=2, column=2)
+		snfEntry.grid(row=2, column=3)
+		expectedIncomeEntry.grid(row=2, column=4)
+
+
+	def placeDataExpense(self,mainframe, ranged_date=[]):
+
+		# Left Frame Contents
+		# First make scrollable section
+		def scrollfunction(event):
+		    canvas.configure(scrollregion=canvas.bbox("all"),width=400,height=400)
+		# For Scrollbar
+		myframe=tkk.LabelFrame(mainframe,width=50,height=130,bd=1, bg=default_color)
+		myframe.grid(row=1, columnspan=10)
+
+
+		canvas=tkk.Canvas(myframe, bg=default_color)
+		sectionTitles=tkk.Frame(canvas, bg=default_color)
+		scrollbar=tkk.Scrollbar(myframe,orient="vertical",command=canvas.yview)
+		canvas.configure(yscrollcommand=scrollbar.set)
+
+		scrollbar.pack(side="right",fill="y")
+		canvas.pack(side="left")
+		canvas.create_window((0,0),window=sectionTitles,anchor='nw')
+		sectionTitles.bind("<Configure>",scrollfunction)
+
+		# Heading of list
+		tkk.Label(sectionTitles, text='S.N', bg=default_color, font=("Georgia", "10")).grid(row=1, column=1, padx=5, pady=20)
+		tkk.Label(sectionTitles, text='Date', bg=default_color, font=("Georgia", "10")).grid(row=1, column=2, padx=5, pady=20)
+		tkk.Label(sectionTitles, text='Chhokar\n(Bora)', bg=default_color, font=("Georgia", "10")).grid(row=1, column=3, padx=5, pady=20)
+		tkk.Label(sectionTitles, text='Dana\n(Bora)', bg=default_color, font=("Georgia", "10")).grid(row=1, column=4, padx=5, pady=20)
+		tkk.Label(sectionTitles, text='Aata\n(Bag)', bg=default_color, font=("Georgia", "10")).grid(row=1, column=5, padx=5, pady=20)
+		tkk.Label(sectionTitles, text='Ghee\n(Jar)', bg=default_color, font=("Georgia", "10")).grid(row=1, column=6, padx=5, pady=20)
+		tkk.Label(sectionTitles, text='Other\n(Rs.)', bg=default_color, font=("Georgia", "10")).grid(row=1, column=7, padx=5, pady=20)
+
+		# First read data
+		with open('expenses_data.txt', 'r') as file:
+			content1 = file.readlines()
+
+		# Check if user has clicked set date button or the window is openes first time
+		if len(ranged_date) != 0:
+			ranged_date_refined = [i.strftime('%m/%d/%Y') for i in ranged_date]
+		# If set button is pressed
+		else:
+			# Get the dates from today to last month
+			today = datetime.date.today()
+			first = today.replace(day=1)
+			lastMonth = first - datetime.timedelta(days=1)
+			delta = today-lastMonth
+
+			ranged_date_refined = [lastMonth+datetime.timedelta(days=i) for i in range(delta.days+1)]
+			ranged_date_refined = [i.strftime('%m/%d/%Y') for i in ranged_date_refined]
+
+		content=[]
+		for line in content1:
+			if line.split('-')[0] in ranged_date_refined:
+				content.append(line)
+		# 'content' is the data to be displayed
+		ro=2
+		total_chokkar = 0
+		total_dana = 0
+		total_aata = 0
+		total_ghee = 0
+		total_other_expenses = 0
+		# this loop will place all available datas between given range
+		# ?Also will calculate total of all entities
+		for i in content:
+			i = i.split('-')
+			others = i[1].split(',')
+			tkk.Label(sectionTitles, text=ro-1, bg=default_color).grid(row=ro, column=1)
+			tkk.Label(sectionTitles, text=i[0], bg=default_color).grid(row=ro, column=2)
+			tkk.Label(sectionTitles, text=others[0], bg=default_color).grid(row=ro, column=3)
+			tkk.Label(sectionTitles, text=others[1], bg=default_color).grid(row=ro, column=4)
+			tkk.Label(sectionTitles, text=others[2], bg=default_color).grid(row=ro, column=5)
+			tkk.Label(sectionTitles, text=others[3], bg=default_color).grid(row=ro, column=6)
+			tkk.Label(sectionTitles, text=others[4], bg=default_color).grid(row=ro, column=7)
+			ro+=1
+	
+			# Update the 'total' entities
+			total_chokkar = total_chokkar+int(others[0]) if others[0] != '' else total_chokkar+0
+			total_dana = total_dana+int(others[1]) if others[1] != '' else total_dana+0
+			total_aata = total_aata+int(others[2]) if others[2] != '' else total_aata+0
+			total_ghee = total_ghee+int(others[3]) if others[3] != '' else total_ghee+0
+			total_other_expenses = total_other_expenses+int(others[4]) if others[4] != '' else total_ghee+0
+
+		with open('priceData.txt','r') as file:
+			read_data = file.readlines()
+		read_data = read_data[1:5]
+		read_data = [int(i.split('=')[1].strip()) for i in read_data]
+		# Total frame
+		totalFrame = tkk.LabelFrame(mainframe, border=0, bg=default_color)
+		totalFrame.grid(row=2, columnspan=10, pady=7)
+
+		# Calculate total net expenses
+		total_net_expenses = total_chokkar*read_data[0]+total_dana*read_data[1]+total_aata*read_data[2]+total_ghee*read_data[3]+total_other_expenses
+
+		# Place the section to display total of all these
+		# Title of total expenses
+		tkk.Label(totalFrame, text='Chokkar\n(Boras)', bg=default_color).grid(row=2, column=1)
+		tkk.Label(totalFrame, text='Dana\n(Boras)', bg=default_color).grid(row=2, column=2)
+		tkk.Label(totalFrame, text='Aata\n(Bag)', bg=default_color).grid(row=2, column=3)
+		tkk.Label(totalFrame, text='Ghee\n(Box)', bg=default_color).grid(row=2, column=4)
+		tkk.Label(totalFrame, text='Other expenses\n(Rs.)', bg=default_color).grid(row=2, column=5)
+		tkk.Label(totalFrame, text='Net Expenses\n(Rs)', bg=default_color).grid(row=2, column=6)
+
+		# Value of totalExpenses
+		chokkar_entry = tkk.Entry(totalFrame, width=9, bg=default_color, font=("Helvetica", "8"))
+		dana_entry = tkk.Entry(totalFrame, width=9, bg=default_color, font=("Helvetica", "8"))
+		aata_entry = tkk.Entry(totalFrame, width=9, bg=default_color, font=("Helvetica", "8"))
+		ghee_entry = tkk.Entry(totalFrame, width=9, bg=default_color, font=("Helvetica", "8"))
+		other_entry = tkk.Entry(totalFrame, width=9, bg=default_color, font=("Helvetica", "8"))
+		total_net_entry = tkk.Entry(totalFrame, width=10, bg=default_color, font=("Helvetica", "8"))
+
+		chokkar_entry.insert(0,total_chokkar)
+		dana_entry.insert(0,total_dana)
+		aata_entry.insert(0,total_aata)
+		ghee_entry.insert(0,total_ghee)
+		other_entry.insert(0,total_other_expenses)
+		total_net_entry.insert(0,total_net_expenses)
+
+		chokkar_entry.configure(state='readonly')
+		dana_entry.configure(state='readonly')
+		aata_entry.configure(state='readonly')
+		ghee_entry.configure(state='readonly')
+		other_entry.configure(state='readonly')
+		total_net_entry.configure(state='readonly')
+
+		chokkar_entry.grid(row=3, column=1)
+		dana_entry.grid(row=3, column=2)
+		aata_entry.grid(row=3, column=3)
+		ghee_entry.grid(row=3, column=4)
+		other_entry.grid(row=3, column=5)
+		total_net_entry.grid(row=3, column=6)
+	
+	def controlPanel(self, mainframe):
+		controlFrame = tkk.LabelFrame(mainframe, text='Control Panel', font=('Helvetica','10'))
+		tkk.Label(controlFrame, text='Pass').pack()
+		controlFrame.grid(row=3, column=1)
+	def setRange(self, mainframe2, date1, date2):
+		intended_dates = [date1+datetime.timedelta(days=i) for i in range((date2-date1).days+1)]
+		self.placeDataMilk(self.left_leftFrame, intended_dates)
+		self.placeDataExpense(self.right_leftFrame, intended_dates)
 
 if __name__ == '__main__':
 	root = tkk.Tk()
 	mainframe = tkk.LabelFrame(root, border=2)
-	expenseRecord('View', root, mainframe)
+	showNetIncome('Net Income', root, mainframe)
 	root.mainloop()
-

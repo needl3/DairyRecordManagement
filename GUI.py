@@ -2,7 +2,7 @@
 # How to automatically catch the calendar data in tkinter whenever user chooses a date without using seperate button to fetch that data?
 
 from tkinter import *
-from functions import milkRecord, viewMilkRecord, expenseRecord
+from functions import milkRecord, viewMilkRecord, expenseRecord, showNetIncome
 
 default_color = '#d1fcf1'
 
@@ -44,7 +44,7 @@ class mainWindow:
         self.deleteButtonE = Button(self.expensesframe, text='DELETE RECORD', height = 2, width=15, border=1, bg=default_color, command = lambda: self.subFunctions('Delete', milk=False))
         self.viewButtonE = Button(self.expensesframe, text='VIEW RECORD', height = 2, width=15, border=1, bg=default_color, command = lambda: self.subFunctions('View', milk=False))
         
-        self.netIncomeButton = Button(self.leftFrame, text = 'SHOW NET INCOME', width=20, height=4, bg=default_color)        
+        self.netIncomeButton = Button(self.leftFrame, text = 'SHOW NET INCOME', width=20, height=4, bg=default_color, command = lambda: self.subFunctions('Net', milk=False))
 
         # Right Child Frame--------------------------------------------------------------------
         self.rightFrame = LabelFrame(self.mainframe, bg=default_color)
@@ -120,8 +120,10 @@ class mainWindow:
             self.milk = milkRecord(title, self.root, mainframeTest).placeGuiMilk()
         elif title == 'View' and milk:
             self.milk = viewMilkRecord(title, self.root, mainframeTest)
-        elif not milk:
+        elif not milk and title == 'Add' or title == 'Edit' or title == 'Delete' or title == 'View':
             self.expense = expenseRecord(title, self.root, mainframeTest)
+        else:
+            self.showNetIncome = showNetIncome(title, self.root, mainframeTest)
 
     def back(self, mainframeTest):
         self.exitButton.configure(text='Exit', command = self.root.quit)
