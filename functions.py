@@ -47,12 +47,12 @@ class milkRecord:
 
 	def placeGuiMilk(self):
 
-		tkk.Label(self.lFrame, text='MORNING', font=('15'), bg=default_color).grid(row=1, padx=5, pady=30, columnspan=4)
+		tkk.Label(self.lFrame, text='MORNING', font=('15'), bg='cyan', relief='ridge').grid(row=1, padx=5, pady=30, columnspan=4)
 		tkk.Label(self.mFrame, text='LITRE', bg=default_color).grid(row=2, column=1, padx=5)
 		tkk.Label(self.mFrame, text='FAT', bg=default_color).grid(row=2, column=2)
 		tkk.Label(self.mFrame, text='SNF', bg=default_color).grid(row=2, column=3)
 
-		tkk.Label(self.mFrame, text='EVENING', font=('15'), bg=default_color).grid(row=1, padx=5, pady=30, columnspan=4)
+		tkk.Label(self.mFrame, text='EVENING', font=('15'), bg='cyan', relief='ridge').grid(row=1, padx=5, pady=30, columnspan=4)
 		tkk.Label(self.lFrame, text='LITRE', bg=default_color).grid(row=2, column=1, padx=5)
 		tkk.Label(self.lFrame, text='FAT', bg=default_color).grid(row=2, column=2)
 		tkk.Label(self.lFrame, text='SNF', bg=default_color).grid(row=2, column=3)
@@ -719,9 +719,9 @@ class expenseRecord:
 		current_date = datetime.datetime.now().strftime('%m/%d/%Y')
 		
 		# Parent Frames for view mosule
-		leftFrame = tkk.LabelFrame(mainframe, bg=default_color)
+		leftFrame = tkk.LabelFrame(mainframe, bg=default_color, border=0)
 		leftFrame.grid(row=1, column=1, padx=20)
-		tkk.Label(leftFrame, text='List of Records', font=("Helvetica", "16"), bg=default_color).grid(row=0, columnspan=10, pady=20)
+		# tkk.Label(leftFrame, text='List of Records', font=("Helvetica", "16"), bg=default_color).grid(row=0, columnspan=10, pady=20)
 
 		rightFrame = tkk.LabelFrame(mainframe, bg=default_color, text='Set Date Range')
 		rightFrame.grid(row=1, column=2)
@@ -899,24 +899,33 @@ class showNetIncome:
 		leftFrame = tkk.LabelFrame(mainframe, border=0, bg=default_color)
 		leftFrame.grid(row=2, column=1)
 
-		rightFrame = tkk.LabelFrame(mainframe, text='Set Date Range', bg=default_color)
-		rightFrame.grid(row=2, column=2)
+		rightFrame = tkk.LabelFrame(mainframe, text='Set Date Range', bg=default_color, font=('Georgia','15'))
+		rightFrame.grid(row=2, column=2, padx=10)
+
+		self.bottomFrame = tkk.LabelFrame(mainframe, border=0)
+		self.bottomFrame.grid(row=3,columnspan=10)
 
 		# Right frame contents
-		tkk.Label(rightFrame, text='From', font=('1'), padx=20, bg=default_color).grid(row=1, column=1, pady=20)
+		tkk.Label(rightFrame, text='From', font=('1'), padx=20, bg='cyan', relief='ridge').grid(row=1, column=1, pady=20)
+		
+		# This right here will change the month to 12 is for eg
+		# current month is January ie 1 then prev will be 0
+		# To handle the tkcalendar exception I edited the month as 12
+		# If after subtracting it becomes 0
 		temp_month = 12 if int(date[1])-1 ==0 else int(date[1])-1
+		
 		cal1 = tc.Calendar(rightFrame, selectmode='day',
 			year=int(date[0]),
 			day=int(date[2]),
 			month=int(temp_month))
-		cal1.grid(row=1, column=2, padx=20)
+		cal1.grid(row=1, column=2, padx=10)
 
-		tkk.Label(rightFrame, text='To', font=('1'), padx=20, bg=default_color).grid(row=3, column=1, pady=20)
+		tkk.Label(rightFrame, text='To', font=('1'), padx=20, bg='cyan', relief='ridge').grid(row=3, column=1, pady=20)
 		cal2 = tc.Calendar(rightFrame, selectmode='day',
 			year=int(date[0]),
 			day=int(date[2]),
 			month=int(date[1]))
-		cal2.grid(row=3, column=2, pady=20, padx=20)
+		cal2.grid(row=3, column=2, pady=20, padx=10)
 		
 		setButton = tkk.Button(
 			rightFrame,
@@ -932,23 +941,22 @@ class showNetIncome:
 		# leftframe contents
 		self.left_leftFrame = tkk.LabelFrame(leftFrame, border=0, bg=default_color)
 		self.left_leftFrame.grid(row=1, column=1)
-		tkk.Label(self.left_leftFrame, text='Milk Record', font=('Helvetica','15'), bg=default_color).grid(row=0, columnspan=10)
 
 		self.right_leftFrame = tkk.LabelFrame(leftFrame, border=0, bg=default_color)
 		self.right_leftFrame.grid(row=1, column=2, sticky='n')
-		tkk.Label(self.right_leftFrame, text='Expense Record', font=('Helvetica','15'), bg=default_color).grid(row=0, columnspan=10)
 
+		# Main placement
 		self.placeDataMilk(self.left_leftFrame, ranged_date = [cal1.selection_get()+datetime.timedelta(days=i) for i in range((cal1.selection_get()-cal2.selection_get()).days+1)])
 		self.placeDataExpense(self.right_leftFrame, ranged_date = [cal1.selection_get()+datetime.timedelta(days=i) for i in range((cal1.selection_get()-cal2.selection_get()).days+1)])
-		self.controlPanel(mainframe)
+		self.controlPanel(sub=False)
 
 	def placeDataMilk(self, mainframe2, ranged_date=[]):
 		def scrollfunction(event):
-		    canvas.configure(scrollregion=canvas.bbox("all"),width=350,height=400)
+		    canvas.configure(scrollregion=canvas.bbox("all"),width=350,height=300)
 		
 		# For Scrollbar
-		myframe=tkk.LabelFrame(mainframe2,width=50,height=130,bd=1, bg=default_color)
-		myframe.grid(row=2, column=1)
+		myframe=tkk.LabelFrame(mainframe2,width=50,height=130, bg=default_color, text='Milk Record', font=('Georgia','15'))
+		myframe.grid(row=2, column=1, padx=30)
 
 		canvas=tkk.Canvas(myframe, bg=default_color)
 		sectionTitles=tkk.Frame(canvas, bg=default_color)
@@ -1109,9 +1117,9 @@ class showNetIncome:
 		# Left Frame Contents
 		# First make scrollable section
 		def scrollfunction(event):
-		    canvas.configure(scrollregion=canvas.bbox("all"),width=400,height=400)
+		    canvas.configure(scrollregion=canvas.bbox("all"),width=350,height=300)
 		# For Scrollbar
-		myframe=tkk.LabelFrame(mainframe,width=50,height=130,bd=1, bg=default_color)
+		myframe=tkk.LabelFrame(mainframe,width=50,height=130,bd=1, bg=default_color, text='Expense Record', font=('Georgia','15'))
 		myframe.grid(row=1, columnspan=10)
 
 
@@ -1126,13 +1134,13 @@ class showNetIncome:
 		sectionTitles.bind("<Configure>",scrollfunction)
 
 		# Heading of list
-		tkk.Label(sectionTitles, text='S.N', bg=default_color, font=("Georgia", "10")).grid(row=1, column=1, padx=5, pady=20)
-		tkk.Label(sectionTitles, text='Date', bg=default_color, font=("Georgia", "10")).grid(row=1, column=2, padx=5, pady=20)
-		tkk.Label(sectionTitles, text='Chhokar\n(Bora)', bg=default_color, font=("Georgia", "10")).grid(row=1, column=3, padx=5, pady=20)
-		tkk.Label(sectionTitles, text='Dana\n(Bora)', bg=default_color, font=("Georgia", "10")).grid(row=1, column=4, padx=5, pady=20)
-		tkk.Label(sectionTitles, text='Aata\n(Bag)', bg=default_color, font=("Georgia", "10")).grid(row=1, column=5, padx=5, pady=20)
-		tkk.Label(sectionTitles, text='Ghee\n(Jar)', bg=default_color, font=("Georgia", "10")).grid(row=1, column=6, padx=5, pady=20)
-		tkk.Label(sectionTitles, text='Other\n(Rs.)', bg=default_color, font=("Georgia", "10")).grid(row=1, column=7, padx=5, pady=20)
+		tkk.Label(sectionTitles, text='S.N', relief='ridge', bg='cyan', font=("Georgia", "10")).grid(row=1, column=1, padx=5, pady=20)
+		tkk.Label(sectionTitles, text='Date', relief='ridge', bg='cyan', font=("Georgia", "10")).grid(row=1, column=2, padx=5, pady=20)
+		tkk.Label(sectionTitles, text='Chhokar\n(Bora)', relief='ridge', bg='cyan', font=("Georgia", "10")).grid(row=1, column=3, padx=5, pady=20)
+		tkk.Label(sectionTitles, text='Dana\n(Bora)', relief='ridge', bg='cyan', font=("Georgia", "10")).grid(row=1, column=4, padx=5, pady=20)
+		tkk.Label(sectionTitles, text='Aata\n(Bag)', relief='ridge', bg='cyan', font=("Georgia", "10")).grid(row=1, column=5, padx=5, pady=20)
+		tkk.Label(sectionTitles, text='Ghee\n(Jar)', relief='ridge', bg='cyan', font=("Georgia", "10")).grid(row=1, column=6, padx=5, pady=20)
+		tkk.Label(sectionTitles, text='Other\n(Rs.)', relief='ridge', bg='cyan', font=("Georgia", "10")).grid(row=1, column=7, padx=5, pady=20)
 
 		# First read data
 		with open('expenses_data.txt', 'r') as file:
@@ -1233,10 +1241,114 @@ class showNetIncome:
 		other_entry.grid(row=3, column=5)
 		total_net_entry.grid(row=3, column=6)
 	
-	def controlPanel(self, mainframe):
-		controlFrame = tkk.LabelFrame(mainframe, text='Control Panel', font=('Helvetica','10'))
-		tkk.Label(controlFrame, text='Pass').pack()
-		controlFrame.grid(row=3, column=1)
+	# Sub is a parameter that states the using mode of this function
+	# If we want to use this method again but without a button to change data we can pass arg sub=True
+	# Sub states as sub method
+	# Spareframe exists to automatically destroy the frame when user confirms writing of data
+	def controlPanel(self, mainframe=None, sub=False, spareframe=None, ro=None):
+
+		def changeTheFreakinData(frame):
+			root1=frame
+			root1.title("Change Data")
+			tkk.Label(root1, text='Change Data')
+			self.controlPanel(mainframe = root1, sub=True, spareframe=root1)
+			root1.mainloop()
+
+		mainframe = self.bottomFrame if mainframe == None else mainframe
+		ro = 3 if ro == None else ro
+
+	
+		controlFrame = tkk.LabelFrame(mainframe, text='Data Panel', bg=default_color, font=('Georgia','12'))
+		controlFrame.grid(row=ro, columnspan=5)
+
+		# First get the pricing values
+		with open('priceData.txt','r') as file:
+			data=file.readlines()
+		mainframeL = tkk.LabelFrame(controlFrame, border=0, bg=default_color)
+		mainframeL.grid(row=1, column=1)
+
+		mainframeR = tkk.LabelFrame(controlFrame, border=0, bg=default_color)
+		mainframeR.grid(row=1, column=2)
+		# Place data
+		# This is data for milk pricing in single line
+		tkk.Label(mainframeL, text='Milk Pricing Data', font=('Georgia','10'), bg='cyan', relief='raised').grid(row=0, column=1, pady=10, padx=5)
+
+		tkk.Label(mainframeL, text='For 1 litre milk with FAT unit', bg=default_color).grid(row=1, column=1, padx=5)
+		fatEntry = tkk.Entry(mainframeL, width=4, bg=default_color)
+		fatEntry.delete(0,tkk.END)
+		fatEntry.insert(0, data[0].split('=')[1].split(',')[1])
+		fatEntry.grid(row=1, column=2)
+
+		tkk.Label(mainframeL, text=' and SNF unit', bg=default_color).grid(row=1, column=3)
+		snfEntry = tkk.Entry(mainframeL, width=4, bg=default_color)
+		snfEntry.delete(0,tkk.END)
+		snfEntry.insert(0, data[0].split('=')[1].split(',')[2])
+		snfEntry.grid(row=1, column=4)
+		
+		tkk.Label(mainframeL, text='the provided price is Rs.', bg=default_color).grid(row=1, column=5)
+		priceEntry = tkk.Entry(mainframeL, width=10, bg=default_color)
+		priceEntry.delete(0,tkk.END)
+		priceEntry.insert(0, data[0].split('=')[1].split(',')[0])
+		priceEntry.grid(row=1, column=6)
+
+		# Data for expenses
+		tkk.Label(mainframeL, text='Expenses Data(Per unit) Rs.', font=('Georgia', '10'), bg='cyan', relief='raised').grid(row=2, column=1, pady=5)
+		tkk.Label(mainframeL, text='Chokkar', bg=default_color, font=('Georgia','8')).grid(row=3, column=1, padx=5)
+		chokkarEntry = tkk.Entry(mainframeL, bg=default_color, width=10)
+		chokkarEntry.delete(0, tkk.END)
+		chokkarEntry.insert(0, data[1].split('=')[1])
+		chokkarEntry.grid(row=3, column=2)
+
+		tkk.Label(mainframeL, text='Dana', bg=default_color, font=('Georgia','8')).grid(row=3, column=3, padx=5)
+		danaEntry = tkk.Entry(mainframeL, bg=default_color, width=10)
+		danaEntry.delete(0, tkk.END)
+		danaEntry.insert(0, data[2].split('=')[1])
+		danaEntry.grid(row=3, column=4)
+		
+		tkk.Label(mainframeL, text='Aata', bg=default_color, font=('Georgia','8')).grid(row=3, column=5, padx=5)
+		aataEntry = tkk.Entry(mainframeL, bg=default_color, width=10)
+		aataEntry.delete(0, tkk.END)
+		aataEntry.insert(0, data[3].split('=')[1])
+		aataEntry.grid(row=3, column=6)
+		
+		tkk.Label(mainframeL, text='Ghee', bg=default_color, font=('Georgia','8')).grid(row=3, column=7, padx=5)
+		gheeEntry = tkk.Entry(mainframeL, bg=default_color, width=10)
+		gheeEntry.delete(0, tkk.END)
+		gheeEntry.insert(0, data[4].split('=')[1])
+		gheeEntry.grid(row=3, column=8)
+
+		if not sub:
+			# Button to change data
+			changeData = tkk.Button(mainframeR, text='Change Data', height=6, bg=default_color, command = lambda: changeTheFreakinData(tkk.Tk()))
+			chokkarEntry.configure(state='readonly')
+			danaEntry.configure(state='readonly')
+			aataEntry.configure(state='readonly')
+			gheeEntry.configure(state='readonly')
+			fatEntry.configure(state='readonly')
+			snfEntry.configure(state='readonly')
+			priceEntry.configure(state='readonly')
+		else:
+			def writeTheFreakinData():
+				# Prepare the data to be written
+				data_to_paste = []
+				data_to_paste.append('dairy_pricing_coefficient='+priceEntry.get()+','+fatEntry.get()+','+snfEntry.get())
+				data_to_paste.append('chokkar_price='+chokkarEntry.get())
+				data_to_paste.append('dana_price='+danaEntry.get())
+				data_to_paste.append('aata_price='+aataEntry.get())
+				data_to_paste.append('ghee_price='+gheeEntry.get())
+				tkinter.messagebox.showinfo('Success', 'Record Updated Successfully')
+				spareframe.destroy()
+
+				# Now overwrite the entire file with new data
+				with open('priceData.txt','w') as file:
+					for i in data_to_paste:
+						file.write(i)
+			changeData = tkk.Button(mainframeR, text='Confirm Edit', height=6, bg=default_color, command = writeTheFreakinData)
+			chokkarEntry.configure(state='normal')
+			chokkarEntry.configure(state='normal')
+			chokkarEntry.configure(state='normal')
+			chokkarEntry.configure(state='normal')
+		changeData.grid(padx=10)
 	def setRange(self, mainframe2, date1, date2):
 		intended_dates = [date1+datetime.timedelta(days=i) for i in range((date2-date1).days+1)]
 		self.placeDataMilk(self.left_leftFrame, intended_dates)

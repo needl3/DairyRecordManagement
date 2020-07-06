@@ -27,7 +27,7 @@ class mainWindow:
         self.milkframe = LabelFrame(self.leftFrame, bg=default_color)
 
         # Milk Frame's elements
-        self.milkLabel1 = Label(self.milkframe, text = 'MILK RECORD', height=2, bg=default_color)
+        self.milkLabel1 = Label(self.milkframe, text = 'MILK RECORD', height=2, bg=default_color, font=('Georgia','12'))
 
         self.addButtonM = Button(self.milkframe, text='ADD RECORD', height = 2, width=15, border=1, command = lambda: self.subFunctions('Add'), bg=default_color)
         self.editButtonM = Button(self.milkframe, text='EDIT RECORD', height = 2, width=15, border=1, command = lambda: self.subFunctions('Edit'), bg=default_color)
@@ -38,7 +38,7 @@ class mainWindow:
         self.expensesframe = LabelFrame(self.leftFrame, bg=default_color)
 
         # Expenses Frame's Elements
-        self.expensesLabel1 = Label(self.expensesframe, text = 'EXPENSES RECORD', height=2, bg=default_color)
+        self.expensesLabel1 = Label(self.expensesframe, text = 'EXPENSES RECORD', height=2, bg=default_color, font=('Georgia','12'))
         self.addButtonE = Button(self.expensesframe, text='ADD RECORD', height = 2, width=15, border=1, bg=default_color, command = lambda: self.subFunctions('Add', milk=False))
         self.editButtonE = Button(self.expensesframe, text='EDIT RECORD', height = 2, width=15, border=1, bg=default_color, command = lambda: self.subFunctions('Edit', milk=False))
         self.deleteButtonE = Button(self.expensesframe, text='DELETE RECORD', height = 2, width=15, border=1, bg=default_color, command = lambda: self.subFunctions('Delete', milk=False))
@@ -46,21 +46,20 @@ class mainWindow:
         
         self.netIncomeButton = Button(self.leftFrame, text = 'SHOW NET INCOME', width=20, height=4, bg=default_color, command = lambda: self.subFunctions('Net', milk=False))
 
-        # Right Child Frame--------------------------------------------------------------------
-        self.rightFrame = LabelFrame(self.mainframe, bg=default_color)
-
-        # Graph Title
-        self.graphTitleLabel = Label(self.rightFrame, text='GRAPHICAL INTERPRETATION', bg=default_color, font=('25'))
+        # Right Child Frame-------------------------------------------, -------------------------
+        self.rightFrame = LabelFrame(self.mainframe, bg=default_color, text='GRAPHICAL INTERPRETATION', font=('Georgia','12'))
         
         # Milk Graph Section ......................................
-        self.milkGraphTitle = Label(self.rightFrame, text='MILK STATUS', bg=default_color)
+        self.milkGraphTitle = Label(self.rightFrame, text='MILK STATUS', bg=default_color, font=('Georgia','12'))
         
         # Expenses Graph Section ......................................
-        self.expensesGraphTitle = Label(self.rightFrame, text='EXPENSES STATUS', bg=default_color)
+        self.expensesGraphTitle = Label(self.rightFrame, text='EXPENSES STATUS', bg=default_color, font=('Georgia','12'))
 
         self.exitButton = Button(
             self.root, text='Exit', height = 2, width=20, command= self.root.quit, bg=default_color
             )
+
+        showNetIncome.controlPanel(self, mainframe=self.root, ro=2)
         
     def placeGuiMain(self):
         self.globalTitle.grid(row=0, columnspan=50, padx=10)
@@ -92,8 +91,6 @@ class mainWindow:
         self.netIncomeButton.grid(row=3,column=1, pady=5)
 
         self.leftFrame.grid(row = 1, column = 1, padx=10, pady=10)
-                
-        self.graphTitleLabel.grid(row=1,column=1,padx=5,pady=5)
 
         self.milkGraphTitle.grid(row=2, column=1, pady=5)
 
@@ -105,9 +102,11 @@ class mainWindow:
                 
         self.rightFrame.grid(row=1, column=2, padx=10, pady=10)
                 
-        self.mainframe.grid(pady=10, padx=10)
+        self.mainframe.grid(row=1, pady=10, padx=10)
 
-        self.exitButton.grid(row=3, column=1, padx=10)
+        self.exitButton.grid(row=2, column=1, padx=10, sticky='s')
+
+
 
     def subFunctions(self, title, milk=True):
 
@@ -124,6 +123,10 @@ class mainWindow:
             self.expense = expenseRecord(title, self.root, mainframeTest)
         else:
             self.showNetIncome = showNetIncome(title, self.root, mainframeTest)
+
+    def showGraph(self):
+        def __init__(self):
+            pass
 
     def back(self, mainframeTest):
         self.exitButton.configure(text='Exit', command = self.root.quit)
